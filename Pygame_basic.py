@@ -27,7 +27,7 @@ class Ruut:
 
 pygame.init()
 
-aken = pygame.display.set_mode([640,480]) # teeb akna
+aken = pygame.display.set_mode([sx,sy]) # teeb akna
 
 tüüp = Ruut() # teeb tegelase
 VX=0 # x telje kiirus
