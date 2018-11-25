@@ -1,9 +1,12 @@
 import pygame
 
+sx= 640 # akna suurus x
+sy = 480 # akna suurus y
+
 class Ruut:
     def __init__(self): # alustab ekraani keskel
-        self.x =320
-        self.y= 240
+        self.x =sx/2
+        self.y= sy/2
         
     def draw(self): # joonistab tegelase
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
@@ -11,12 +14,12 @@ class Ruut:
     def tp(self): # peatab aknast välja mineku
         if self.x <20:
             self.x = 20
-        if self.x >620:
-            self.x = 620
+        if self.x >sx - 20:
+            self.x = sx-20
         if self.y <20:
             self.y = 20
-        if self.y >460:
-            self.y = 460
+        if self.y >sy-20:
+            self.y = sy-20
 
     def update(self,vx,vy): # liikutab tegelast
         self.x += vx
