@@ -1,41 +1,41 @@
 import pygame
 
 class Ruut:
-    def __init__(self):
+    def __init__(self): # alustab ekraani keskel
         self.x =320
         self.y= 240
         
-    def draw(self):
+    def draw(self): # joonistab tegelase
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
         
-    def tp(self):
+    def tp(self): # peatab aknast välja mineku
         if self.x <0:
-            self.x = 640
-        if self.x >640:
             self.x = 0
+        if self.x >640:
+            self.x = 640
         if self.y <0:
-            self.y = 240
-        if self.y >240:
             self.y = 0
+        if self.y >240:
+            self.y = 240
 
-    def update(self,vx,vy):
+    def update(self,vx,vy): # liikutab tegelast
         self.x += vx
         self.y += vy
 
 pygame.init()
 
-aken = pygame.display.set_mode([640,480])
+aken = pygame.display.set_mode([640,480]) # teeb akna
 
-tüüp = Ruut()
-VX=0
-VY=0
-XL=2
+tüüp = Ruut() # teeb tegelase
+VX=0 # x telje kiirus
+VY=0 # y telje kiirus
+XL=2 # kui kiiresti liigub
 
 töötab=True
 
 while töötab:
     for e in pygame.event.get():
-        if e.type == pygame.QUIT:
+        if e.type == pygame.QUIT: # lülitub välja korralikult kui kinni pannakse
             töötab = False
         elif e.type == pygame.KEYDOWN:
             if e.key == pygame.K_UP:
