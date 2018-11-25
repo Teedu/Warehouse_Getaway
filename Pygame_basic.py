@@ -9,14 +9,14 @@ class Ruut:
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
         
     def tp(self): # peatab aknast välja mineku
-        if self.x <0:
-            self.x = 0
-        if self.x >640:
-            self.x = 640
-        if self.y <0:
-            self.y = 0
-        if self.y >240:
-            self.y = 240
+        if self.x <20:
+            self.x = 20
+        if self.x >620:
+            self.x = 620
+        if self.y <20:
+            self.y = 20
+        if self.y >460:
+            self.y = 460
 
     def update(self,vx,vy): # liikutab tegelast
         self.x += vx
@@ -57,6 +57,7 @@ while töötab:
                 VX -= XL
         
     tüüp.update(VX,VY)
+    tüüp.tp()
     aken.fill([255,255,255])
     tüüp.draw()
     pygame.display.flip()
