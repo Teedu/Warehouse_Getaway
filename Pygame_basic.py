@@ -14,17 +14,17 @@ class Ruut:
     def tp(self):
         if self.x <20:
             self.x = 20
-        if self.x >620:
-            self.x = 620
-        if self.y >460:
-            self.y = 460
+        if self.x >sx-20:
+            self.x = sx-20
+        if self.y > sy-20:
+            self.y = sy-20
+
 
     def update(self,vx,vy):
         self.x += vx # liikumine
         self.y += vy
         if jump != False: # hüppamine põrandal tööab
             VY=0
-        
 
 pygame.init()
 
@@ -34,7 +34,6 @@ tüüp = Ruut()
 VX=0
 VY=0
 XL=5
-
 
 jump=False
 
@@ -60,14 +59,13 @@ while töötab:
                 VX -= -XL
             if e.key == pygame.K_RIGHT:
                 VX -= XL
-    VY += 1
+    VY += 1 # gravitatsioon
     tüüp.update(VX,VY)
     tüüp.tp()
     aken.fill([255,255,255])
     tüüp.draw()
     pygame.display.flip()
     pygame.time.delay(17)
-    
 pygame.quit()
 
 
