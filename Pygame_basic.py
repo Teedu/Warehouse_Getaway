@@ -34,20 +34,20 @@ VY=0
 XL=5
 
 
-jump=True
+jump=False
 
 
 töötab=True
 
 while töötab:
     if tüüp.y == 460:
-        jump=False
+        jump=True
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             töötab = False
         elif e.type == pygame.KEYDOWN:
             if e.key == pygame.K_UP:
-                jump = True
+                jump = False
                 VY = -15
             if e.key == pygame.K_LEFT:
                 VX += -XL
@@ -59,7 +59,7 @@ while töötab:
             if e.key == pygame.K_RIGHT:
                 VX -= XL
     VY += 1
-    if jump != True:
+    if jump != False:
         VY=0
     tüüp.update(VX,VY)
     tüüp.tp()
