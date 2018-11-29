@@ -12,16 +12,18 @@ class Ruut:
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
         
     def tp(self):
-        if self.x <0:
-            self.x = 640
-        if self.x >640:
-            self.x = 0
+        if self.x <20:
+            self.x = 20
+        if self.x >620:
+            self.x = 620
         if self.y >460:
             self.y = 460
 
     def update(self,vx,vy):
-        self.x += vx
+        self.x += vx # liikumine
         self.y += vy
+        if jump != False: # hüppamine põrandal tööab
+            VY=0
         
 
 pygame.init()
@@ -59,8 +61,6 @@ while töötab:
             if e.key == pygame.K_RIGHT:
                 VX -= XL
     VY += 1
-    if jump != False:
-        VY=0
     tüüp.update(VX,VY)
     tüüp.tp()
     aken.fill([255,255,255])
