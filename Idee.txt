@@ -1,7 +1,5 @@
-Tegemist on 2D luure mänguga kõrvalt vaates, kus peab kuhugi sisse hiilima ja sihtmärgi tapma. Gameplay on HITMAN(2016), Mark of the Ninja ja HotlineMiami põhjal.
+Tegemist on 2D luure mÃ¤nguga kÅ‘rvalt vaates, kus peab kuhugi sisse hiilima ja sihtmÃ¤rgi tapma. Gameplay on HITMAN(2016), Mark of the Ninja ja HotlineMiami pÅ‘hjal.
 
-Tehnine külg:
+Tehnine kÃ¼lg:
 
-Mängus tuleb vähemalt 3 klassi: mängija, valvur ja sihtmärk (arvatavasti rohkem aga ei tea kui palju kuna ei tea veel kuidas pygame töötab). Igale nendet on vaja oma pilte ja käitumist. Oleks hea kui keegi meeskonnast oskaks joonistada. On vaja välja mõelda ka level/map/mänguväli. Mängule on vaja ka muusikat ja teist heli nii et oleks tore kui vähemalt üks meekonna liige oskaks muusikat teha.
-
-Ma ei tea kui suur meeskond peaks olema,kuna pole varem midagi sellist teinud, aga loodan et kui on 4-6 siis saab hakkama 
+MÃ¤ngus tuleb vÃ¤hemalt 3 klassi: mÃ¤ngija, valvur ja sihtmÃ¤rk (arvatavasti rohkem aga ei tea kui palju kuna ei tea veel kuidas pygame tÃ¶Ã¶tab). Igale nendet on vaja oma pilte ja kÃ¤itumist. Oleks hea kui keegi meeskonnast oskaks joonistada. On vaja vÃ¤lja mÅ‘elda ka level/map/mÃ¤nguvÃ¤li. MÃ¤ngule on vaja ka muusikat ja teist heli nii et oleks tore kui vÃ¤hemalt Ã¼ks meekonna liige oskaks muusikat teha.
