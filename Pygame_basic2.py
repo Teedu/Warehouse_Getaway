@@ -2,7 +2,7 @@ import pygame
 
 class Ruut(pygame.sprite.Sprite):
     
-    def __init__(self, x, y): # alustab ekraani keskel
+    def __init__(self, x, y):
         
         super().__init__()
         
@@ -18,7 +18,7 @@ class Ruut(pygame.sprite.Sprite):
         self.kiirus_x = 0
         self.seinad = None
         
-    def tp(self):
+    def tp(self):# ei lähe akna äärtest välja -Rasmus
         if self.x <20:
             self.x = 20
         if self.x >sx-20:
@@ -26,7 +26,7 @@ class Ruut(pygame.sprite.Sprite):
         if self.y > sy-20:
             self.y = sy-20
 
-    def update(self,VX,VY, seinad):
+    def update(self,VX,VY, seinad):# liikumine -Rasmus
         self.x += VX # liikumine
         self.y += VY
         if jump != False: # hüppamine põrandal tööab
@@ -56,7 +56,7 @@ class Ruut(pygame.sprite.Sprite):
         
 class Sein(pygame.sprite.Sprite):
     
-    def __init__(self, x, y, width, heigth): # alustab ekraani keskel
+    def __init__(self, x, y, width, heigth):
         
         pygame.sprite.Sprite.__init__(self)
         

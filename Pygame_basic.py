@@ -4,14 +4,14 @@ sx= 640 # akna suurus x
 sy = 480 # akna suurus y
 
 class Ruut:
-    def __init__(self): # alustab ekraani keskel
+    def __init__(self): # Tegelase keskpunkt on akna keskel
         self.x =sx/2
         self.y= sy/2
         
-    def draw(self): 
+    def draw(self): # teeb tegelase aknasse
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
         
-    def tp(self):
+    def tp(self):#Ei lase tegelasel läbi akna ääre minna
         if self.x <20:
             self.x = 20
         if self.x >sx-20:
@@ -46,7 +46,7 @@ while töötab:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             töötab = False
-        elif e.type == pygame.KEYDOWN:
+        elif e.type == pygame.KEYDOWN:# Mängia nuppuvajutuste vastuvõtt
             if e.key == pygame.K_UP:
                 jump = False
                 VY = -15
