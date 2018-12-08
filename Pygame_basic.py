@@ -25,7 +25,22 @@ class Ruut:
         self.y += vy
         if jump != False: # hüppamine põrandal tööab
             VY=0
+            
+class Sein:
+    def __init__(self, x,y,w,h):
+        self.x=x
+        self.y=y
+        self.w=w
+        self.h=h
+        
+    def draw(self):
+        pygame.draw.rect(aken,[0,0,0],[ self.x, self.y, self.w, self.h],0)
 
+
+def seinad():
+    if (tüüp.x-20) in range(sein.x, (sein.x + sein.w)) and (tüüp.y+20) not in range(0, sein.y):
+        tüüp.x = sein.x + sein.w + 20
+        
 pygame.init()
 
 aken = pygame.display.set_mode([sx,sy])
@@ -34,6 +49,8 @@ tüüp = Ruut()
 VX=0
 VY=0
 XL=5
+
+sein =Sein(0,300,200,280)
 
 jump=False
 
@@ -61,8 +78,10 @@ while töötab:
                 VX -= XL
     VY += 1 # gravitatsioon
     tüüp.update(VX,VY)
+    seinad()
     tüüp.tp()
     aken.fill([255,255,255])
+    sein.draw()
     tüüp.draw()
     pygame.display.flip()
     pygame.time.delay(17)
