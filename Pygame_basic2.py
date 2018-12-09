@@ -2,95 +2,99 @@ import pygame
 
 class Ruut(pygame.sprite.Sprite):
     
-    def __init__(self, x, y): # alustab ekraani keskel
+    def __init__(self, x, y): 
         
-        super().__init__()
+        super().__init__() 
         
-        pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self) #
         
-        self.image = pygame.Surface([15, 15])
-        self.image.fill([255,0,0])
+        self.image = pygame.Surface([15, 15]) #loob selle kujutise
+        self.image.fill([255,0,0]) #teeb selle punaseks
         
-        self.rect = self.image.get_rect()
-        self.rect.y = y
+        self.rect = self.image.get_rect() #moodustab sellest ristküliku
+        self.rect.y = y  #külgede väärtused
         self.rect.x = x
         
-        self.kiirus_x = 0
+        self.kiirus_x = 0 #seda pole vaja vist sest kiirus on teises funktsioonis
         self.seinad = None
         
     def tp(self):
-        if self.x <20:
-            self.x = 20
-        if self.x >sx-20:
-            self.x = sx-20
-        if self.y > sy-20:
-            self.y = sy-20
+        if self.rect.x <20:
+            self.rect.x = 20
+        if self.rect.x >sx-20:
+            self.rect.x = sx-20
+        if self.rect.y > sy-20:
+            self.rect.y = sy-20
 
     def update(self,VX,VY, seinad):
-        self.x += VX # liikumine
-        self.y += VY
+        self.rect.x += VX # liikumine
+        self.rect.y += VY
         if jump != False: # hüppamine põrandal tööab
             VY=0
         
         #Seina puudutamise osa
             
         #paremale vasakule
-        self.rect.x += self.x
+        self.rect.x += self.rect.x
         
         seina_list = pygame.sprite.spritecollide(self, self.seinad, False)
         for sein in seina_list:
-            if self.x > sx/2:
-                self.rect.right = sein.rect.left
+            if self.rect.x > sx/2:
+                self.rect.right = sein.rect.left #kui ruut puudutab paremaküljega seina siis annab ruudule seina vasakupoole kodinaadid ehk ei saa läbi minna 
             else:
-                self.rect.left = sein.rect.right
+                self.rect.left = sein.rect.right #sama aga teistpid
         
         #Üles ALLA
-        self.rect.y += self.y
+        self.rect.y += self.rect.y
         
         seina_list = pygame.sprite.spritecollide(self, self.seinad, False)
         for sein in seina_list:
-            if self.y > sy/2:
-                self.rect.bottom = sein.rect.top
+            if self.rect.y > sy/2:
+                self.rect.bottom = sein.rect.top #sama aga y suunas
             else:
                 self.rect.top = sein.rect.bottom
         
 class Sein(pygame.sprite.Sprite):
     
-    def __init__(self, x, y, width, heigth): # alustab ekraani keskel
+    def __init__(self, x, y, width, heigth): 
         
-        pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self) #teeb sprite-i
         
         self.image = pygame.Surface([width, heigth])
         self.image.fill([0,0,255])
         
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect() #sama mis ruuduga
         self.rect.x = x
         self.rect.y = y
           
 pygame.init()
 
 aknaSuurus = pygame.display.Info()
-sx = aknaSuurus.current_w # akna suurus x
-sy = aknaSuurus.current_h # akna suurus y
+sx = aknaSuurus.current_w # akna suurus x vastavalt monitorile
+sy = aknaSuurus.current_h # akna suurus y vastavalt monitorile
 
 #aken = pygame.display.set_mode([sx,sy])
-aken = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+aken = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) #kuvab mängu täisekraanil
 
 VX=0
 VY=0
 XL=5
 
-sprite_list = pygame.sprite.Group()
+sprite_list = pygame.sprite.Group() #paneb listi sprite groupi 
 seina_list = pygame.sprite.Group()
 
-sein = Sein(760,1000,1000,50)
+sein = Sein(760,1000,1000,50) #Loome seina selliste atribuutidega
+seina_list.add(sein)     #SEin lisatakse listi
+sprite_list.add(sein)     #Spritelisti ka
+
+sein = Sein(320,400,1000,50)
 seina_list.add(sein)
 sprite_list.add(sein)
 
-tüüp = Ruut(100, 100)
-tüüp.seinad = seina_list
+tüüp = Ruut(100, 100) #Loob ruudu mille nimi on tüüp
+tüüp.seinad = seina_list 
 
-sprite_list.add(tüüp)
+sprite_list.add(tüüp) 
 
 jump=False
 
@@ -118,10 +122,10 @@ while töötab:
     
     
     VY += 1 # gravitatsioon
-    #sprite_list.update(VX, VY, seina_list)                                              <=================
+    #sprite_list.update(VX, VY, seina_list)                                             # <=================
     #tüüp.tp()                                                                           <=================
     aken.fill([255,255,255])
-    sprite_list.draw(aken)
+    sprite_list.draw(aken) #joonistab spritid
     pygame.display.flip()
     pygame.time.delay(17)
     
