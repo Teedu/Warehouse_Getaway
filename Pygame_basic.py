@@ -1,5 +1,8 @@
 import pygame
 
+pygame.init()
+
+#aknaInfo = pygame.display.Info()
 sx= 640 # akna suurus x
 sy = 480 # akna suurus y
 
@@ -26,9 +29,7 @@ class Ruut:
         if jump != False: # hüppamine põrandal tööab
             VY=0
 
-pygame.init()
-
-aken = pygame.display.set_mode([sx,sy])
+aken = pygame.display.set_mode((sx,sy))
 
 tüüp = Ruut()
 VX=0
@@ -36,8 +37,6 @@ VY=0
 XL=5
 
 jump=False
-
-
 töötab=True
 
 while töötab:
