@@ -1,103 +1,138 @@
 import pygame
 
+sw=640
+sh=480
+
+aken = pygame.display.set_mode([sw,sh])
+
 pygame.init()
 
-#aknaInfo = pygame.display.Info()
-sx= 640 # akna suurus x
-sy = 480 # akna suurus y
-
-class Ruut:
-    def __init__(self): # Tegelase keskpunkt on akna keskel
-        self.x =sx/2
-        self.y= sy/2
+class Person:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+        self.vx=0
+        self.vy=0
+        self.points_bol=[False,False,False,
+                         False,False,False,
+                         False,False,False]
+        self.move_bol=[False,False,False]
+        self.jump1=False
+        self.jump2=False
         
-    def draw(self): # teeb tegelase aknasse
+    
+    def draw(self):
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
         
-    def tp(self):
-        if self.x < 20: # ei lase tegelast akna äärtest välja
-            self.x = 20
-        if self.x > sx-20:
-            self.x = sx-20
-        if self.y > sy-20:
-            self.y = sy-20
-        
-        for s in seinad:
-            if self.punktid[7][0] in range(s.x,(s.x+s.w)) and self.punktid[7][1] in range(s.y,(s.y+s.h)):
-                self.y = s.y-20
+    def update(self,walls):
+        self.points_bol=[False,False,False,
+                         False,False,False,
+                         False,False,False]
+        self.jump1=False
+        for s in walls:
+            if self.x in range(s.x, s.x+s.w) and self.y + 20 in range(s.y,s.y+s.h):
+                self.points_bol[7]=True
+                self.y =s.y-20
                 self.vy = 0
-            elif self.punktid[5][0] in range(s.x,(s.x+s.w)) and self.punktid[5][1] in range(s.y,(s.y+s.h)):
-                self.x = s.x-20
-            elif self.punktid[3][0] in range(s.x,(s.x+s.w)) and self.punktid[3][1] in range(s.y,(s.y+s.h)):
-                self.x = s.x+s.w+20
-            elif self.punktid[1][0] in range(s.x,(s.x+s.w)) and self.punktid[1][1] in range(s.y,(s.y+s.h)):
-                self.y = s.y+s.h+20
-                self.vy = 0
-
-
-    def update(self,vx,vy):
-        self.vx = vx
-        self.vy = vy
-        self.x += self.vx # liikumine
-        self.y += self.vy
-        if jump != False: # hüppamine põrandal tööab
-            VY=0
-        self.punktid = [[self.x-20, self.y-20],[self.x, self.y-20],[self.x+20, self.y-20],
-                        [self.x-20, self.y],   [self.x, self.y],   [self.x+20, self.y],
-                        [self.x-20, self.y+20],[self.x, self.y+20],[self.x+20, self.y+20]]
+                self.jump1=True
+                self.jump2=True
+            elif self.x+20 in range(s.x, s.x+s.w) and self.y in range(s.y,s.y+s.h):
+                self.points_bol[5]=True
+                self.x =s.x-20
+                self.jump2=True
+            elif self.x-20 in range(s.x, s.x+s.w) and self.y in range(s.y,s.y+s.h):
+                self.points_bol[3]=True
+                self.x =s.x+s.w+19
+                self.jump2=True
+            elif self.x in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
+                self.points_bol[1]=True
+                self.y =s.y+s.h+20
+            elif self.x+20 in range(s.x, s.x+s.w) and self.y+20 in range(s.y,s.y+s.h):
+                self.points_bol[8]=True
+            elif self.x-20 in range(s.x, s.x+s.w) and self.y+20 in range(s.y,s.y+s.h):
+                self.points_bol[6]=True
+            elif self.x+20 in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
+                self.points_bol[2]=True
+            elif self.x-20 in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
+                self.points_bol[0]=True
+                
+    def move(self):
+        if self.points_bol[7] == True:
+            self.vy = 0
+        elif self.points_bol[7] == False:
+            self.vy +=1
             
-class Sein:
-    def __init__(self, x, y, w, h):
+        if self.move_bol[0]==True and self.move_bol[2]==True:
+            self.vx =0
+        elif self.move_bol[0]==True and self.points_bol[3] != True:
+            self.vx=-5
+        elif self.move_bol[2]==True and self.points_bol[5] != True:
+            self.vx= 5
+        if self.move_bol[1]==True and (self.jump1==True or self.jump2 == True):
+            self.vy =-10
+            if self.jump1==True:
+                self.jump1=False
+            elif self.jump2==True:
+                self.jump2=False
+        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
+            self.vx= int(self.vx * 0.75)
+        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]!=True:
+            if self.vx >0:
+                self.vx-=1
+            if self.vx <0:
+                self.vx+=1
+        if (self.points_bol[3] == True or self.points_bol[5] == True) and not self.vy < 0:
+            self.vy =0
+            
+        self.x+=self.vx
+        self.y+=self.vy
+        
+class Wall:
+    def __init__(self,x,y,w,h):
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-        
+    
     def draw(self):
         pygame.draw.rect(aken,[0,0,0],[ self.x, self.y, self.w, self.h],0)
         
-pygame.init()
+player=Person(sw/2,sh/2)
+people=[player]
 
-aken = pygame.display.set_mode([sx,sy])
+wall1 =Wall(20,450,600,40)
+wall2 =Wall(400,200,80,500)
+walls =[wall1,wall2]
 
-tüüp = Ruut()
-VX=0
-VY=0
-XL=5
-
-sein =Sein(400,150,110,200)
-seinad = [sein]
-
-jump=False
 töötab=True
-
 while töötab:
-    if tüüp.y == 460:
-        jump=True
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             töötab = False
-        elif e.type == pygame.KEYDOWN:# Mängia nuppuvajutuste vastuvõtt
-            if e.key == pygame.K_UP:
-                jump = False
-                VY = -15
-            if e.key == pygame.K_LEFT:
-                VX += -XL
-            if e.key == pygame.K_RIGHT:
-                VX += XL
+        elif e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_w:
+                player.move_bol[1]=True
+            if e.key == pygame.K_a:
+                player.move_bol[0]=True
+            if e.key == pygame.K_d:
+                player.move_bol[2]=True
         elif e.type == pygame.KEYUP:
-            if e.key == pygame.K_LEFT:
-                VX -= -XL
-            if e.key == pygame.K_RIGHT:
-                VX -= XL
-    VY += 1 # gravitatsioon
-    tüüp.update(VX,VY)
-    tüüp.tp()
+            if e.key == pygame.K_w:
+                player.move_bol[1]=False
+            if e.key == pygame.K_a:
+                player.move_bol[0]=False
+            if e.key == pygame.K_d:
+                player.move_bol[2]=False
+    
     aken.fill([255,255,255])
-    sein.draw()
-    tüüp.draw()
+    for p in people:
+        p.update(walls)
+        p.move()
+        p.draw()
+    for s in walls:
+        s.draw()
+    
     pygame.display.flip()
+    print(player.jump1, player.jump2)
     pygame.time.delay(17)
 pygame.quit()
-
-
