@@ -5,7 +5,7 @@ sh=480
 
 pygame.init()
 
-aken = pygame.display.set_mode([sw,sh])
+window = pygame.display.set_mode([sw,sh])
 
 class Person:
     def __init__(self,x,y,colour):
@@ -24,7 +24,7 @@ class Person:
         self.var=0
     
     def draw(self):
-        pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
+        pygame.draw.rect(window,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
         
     def update(self,walls):
         self.points_bol=[False,False,False,
@@ -132,7 +132,7 @@ class Wall:
         self.h=h
     
     def draw(self):
-        pygame.draw.rect(aken,[0,0,0], [self.x, self.y, self.w, self.h],0)
+        pygame.draw.rect(window,[0,0,0], [self.x, self.y, self.w, self.h],0)
         
 class WinArea:
     def __init__(self,x,y,w,h):
@@ -142,7 +142,7 @@ class WinArea:
         self.h=h
         
     def draw(self):
-        pygame.draw.rect(aken,(71,209,255),[self.x, self.y, self.w, self.h],0)
+        pygame.draw.rect(window,(71,209,255),[self.x, self.y, self.w, self.h],0)
         
     def win(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
@@ -157,7 +157,7 @@ class LoseArea:
         self.h=h
         
     def draw(self):
-        pygame.draw.rect(aken,(100,0,0),[self.x, self.y, self.w, self.h],0)
+        pygame.draw.rect(window,(100,0,0),[self.x, self.y, self.w, self.h],0)
         
     def lose(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
@@ -177,12 +177,12 @@ win = WinArea(590,0,50,120)
 lose =LoseArea(330,400,400,100)
 areas =[win,lose]
 
-töötab=True
-while töötab:
+on=True
+while on:
     for e in pygame.event.get():
-        töötab= win.win(player)
+        on= win.win(player)
         if e.type == pygame.QUIT:
-            töötab = False
+            on = False
         elif e.type == pygame.KEYDOWN:
             if e.key == pygame.K_w:
                 player.move_bol[1]=True
@@ -206,7 +206,7 @@ while töötab:
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=False
     
-    aken.fill([255,255,255])
+    window.fill([255,255,255])
     
     for a in areas:
         a.draw()
