@@ -134,6 +134,21 @@ class Wall:
     def draw(self):
         pygame.draw.rect(aken,[0,0,0], [self.x, self.y, self.w, self.h],0)
         
+class WinArea:
+    def __init__(self,x,y,w,h):
+        self.x=x
+        self.y=y
+        self.w=w
+        self.h=h
+        
+    def draw(self):
+        pygame.draw.rect(aken,(71,209,255),[self.x, self.y, self.w, self.h],0)
+        
+    def win(self,player):
+        if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
+             return False
+        else: return True
+        
 player=Person(sw/2,sh/2,(225,0,0))
 people=[player]
 
@@ -142,9 +157,12 @@ wall2 =Wall(400,200,80,500)
 wall3 =Wall(200,250,150,50)
 walls =[wall1,wall2,wall3]
 
+win = WinArea(590,0,50,120)
+
 töötab=True
 while töötab:
     for e in pygame.event.get():
+        töötab= win.win(player)
         if e.type == pygame.QUIT:
             töötab = False
         elif e.type == pygame.KEYDOWN:
@@ -171,6 +189,7 @@ while töötab:
                 player.move_bol[4]=False
     
     aken.fill([255,255,255])
+    win.draw()
     for p in people:
         p.update(walls)
         p.move()
@@ -179,6 +198,5 @@ while töötab:
         s.draw()
     
     pygame.display.flip()
-    print(player.jump1, player.jump2, player.jump_bol)
-    pygame.time.delay(20)
+    pygame.time.delay(17)
 pygame.quit()
