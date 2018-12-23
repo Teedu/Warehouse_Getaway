@@ -3,23 +3,25 @@ import pygame
 sw=640
 sh=480
 
-aken = pygame.display.set_mode([sw,sh])
-
 pygame.init()
 
+aken = pygame.display.set_mode([sw,sh])
+
 class Person:
-    def __init__(self,x,y):
+    def __init__(self,x,y,colour):
         self.x=x
         self.y=y
+        self.colour=colour
         self.vx=0
         self.vy=0
         self.points_bol=[False,False,False,
                          False,False,False,
                          False,False,False]
-        self.move_bol=[False,False,False]
+        self.move_bol=[False,False,False,False,False]
         self.jump1=False
         self.jump2=False
-        
+        self.jump_bol=True
+        self.var=0
     
     def draw(self):
         pygame.draw.rect(aken,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
@@ -39,10 +41,12 @@ class Person:
             elif self.x+20 in range(s.x, s.x+s.w) and self.y in range(s.y,s.y+s.h):
                 self.points_bol[5]=True
                 self.x =s.x-20
+                self.jump1=True
                 self.jump2=True
             elif self.x-20 in range(s.x, s.x+s.w) and self.y in range(s.y,s.y+s.h):
                 self.points_bol[3]=True
                 self.x =s.x+s.w+19
+                self.jump1=True
                 self.jump2=True
             elif self.x in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
                 self.points_bol[1]=True
@@ -62,27 +66,60 @@ class Person:
         elif self.points_bol[7] == False:
             self.vy +=1
             
+        if (self.move_bol[3]==False and self.move_bol[1]==False) and (self.points_bol[3]==True or self.points_bol[5]==True):
+            self.vy =0
+        elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[3]==True:
+            self.vy= 5
+        elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[1]==True:
+            self.vy=-5
+            
+        if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:
+            self.vy=-10
+            self.vx= 5
+            self.jump1 =False
+            self.jump_bol=False
+        elif self.points_bol[5]==True and self.move_bol[4]==True and self.jump_bol==True:
+            self.vy=-10
+            self.vx=-5
+            self.jump1 =False
+            self.jump_bol=False
+            
         if self.move_bol[0]==True and self.move_bol[2]==True:
             self.vx =0
         elif self.move_bol[0]==True and self.points_bol[3] != True:
             self.vx=-5
         elif self.move_bol[2]==True and self.points_bol[5] != True:
             self.vx= 5
-        if self.move_bol[1]==True and (self.jump1==True or self.jump2 == True):
+            
+        if (self.move_bol[1]==True or self.move_bol[4]==True) and self.jump1==True and not (self.points_bol[3]==True or self.points_bol[5]==True) and self.jump_bol==True:
             self.vy =-10
-            if self.jump1==True:
-                self.jump1=False
-            elif self.jump2==True:
-                self.jump2=False
+            self.jump1=False
+            self.jump_bol=False
+        elif (self.move_bol[1]==True or self.move_bol[4]==True) and self.jump2==True and not (self.points_bol[3]==True or self.points_bol[5]==True) and self.jump_bol==True:
+            self.vy =-10
+            self.jump2=False
+            self.jump_bol=False
+
         if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
             self.vx= int(self.vx * 0.75)
-        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]!=True:
-            if self.vx >0:
-                self.vx-=1
-            if self.vx <0:
-                self.vx+=1
-        if (self.points_bol[3] == True or self.points_bol[5] == True) and not self.vy < 0:
-            self.vy =0
+##        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
+##            if self.vx >0:
+##                self.vx-=1
+##            if self.vx <0:
+##                self.vx+=1
+                
+        if self.move_bol[1]==True:
+            self.var=1
+        elif self.move_bol[4]==True:
+            self.var=2
+            
+        if self.var!=0:
+            if self.jump_bol==False and self.move_bol[1]==False and self.var==1:
+                self.jump_bol=True
+                self.var=0
+            if self.jump_bol==False and self.move_bol[4]==False and self.var==2:
+                self.jump_bol=True
+                self.var=0
             
         self.x+=self.vx
         self.y+=self.vy
@@ -95,14 +132,15 @@ class Wall:
         self.h=h
     
     def draw(self):
-        pygame.draw.rect(aken,[0,0,0],[ self.x, self.y, self.w, self.h],0)
+        pygame.draw.rect(aken,[0,0,0], [self.x, self.y, self.w, self.h],0)
         
-player=Person(sw/2,sh/2)
+player=Person(sw/2,sh/2,(225,0,0))
 people=[player]
 
 wall1 =Wall(20,450,600,40)
 wall2 =Wall(400,200,80,500)
-walls =[wall1,wall2]
+wall3 =Wall(200,250,150,50)
+walls =[wall1,wall2,wall3]
 
 töötab=True
 while töötab:
@@ -116,6 +154,10 @@ while töötab:
                 player.move_bol[0]=True
             if e.key == pygame.K_d:
                 player.move_bol[2]=True
+            if e.key == pygame.K_s:
+                player.move_bol[3]=True
+            if e.key == pygame.K_SPACE:
+                player.move_bol[4]=True
         elif e.type == pygame.KEYUP:
             if e.key == pygame.K_w:
                 player.move_bol[1]=False
@@ -123,6 +165,10 @@ while töötab:
                 player.move_bol[0]=False
             if e.key == pygame.K_d:
                 player.move_bol[2]=False
+            if e.key == pygame.K_s:
+                player.move_bol[3]=False
+            if e.key == pygame.K_SPACE:
+                player.move_bol[4]=False
     
     aken.fill([255,255,255])
     for p in people:
@@ -133,6 +179,6 @@ while töötab:
         s.draw()
     
     pygame.display.flip()
-    print(player.jump1, player.jump2)
-    pygame.time.delay(17)
+    print(player.jump1, player.jump2, player.jump_bol)
+    pygame.time.delay(20)
 pygame.quit()
