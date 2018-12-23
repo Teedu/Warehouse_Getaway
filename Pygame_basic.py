@@ -102,11 +102,11 @@ class Person:
 
         if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
             self.vx= int(self.vx * 0.75)
-##        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
-##            if self.vx >0:
-##                self.vx-=1
-##            if self.vx <0:
-##                self.vx+=1
+        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
+            if self.vx >0:
+                self.vx=int(self.vx * 0.99)
+            if self.vx <0:
+                self.vx=int(self.vx * 0.99)
                 
         if self.move_bol[1]==True:
             self.var=1
@@ -149,15 +149,33 @@ class WinArea:
              return False
         else: return True
         
-player=Person(sw/2,sh/2,(225,0,0))
+class LoseArea:
+    def __init__(self,x,y,w,h):
+        self.x=x
+        self.y=y
+        self.w=w
+        self.h=h
+        
+    def draw(self):
+        pygame.draw.rect(aken,(100,0,0),[self.x, self.y, self.w, self.h],0)
+        
+    def lose(self,player):
+        if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
+             player.__init__(80,400,(225,0,0))
+        
+player=Person(80,400,(225,0,0))
 people=[player]
 
-wall1 =Wall(20,450,600,40)
-wall2 =Wall(400,200,80,500)
+wall1 =Wall(0,450,330,40)
+wall2 =Wall(160,400,80,200)
 wall3 =Wall(200,250,150,50)
-walls =[wall1,wall2,wall3]
+wall4 =Wall(550,250,70,50)
+wall5 =Wall(450,0,40,150)
+walls =[wall1,wall2,wall3,wall4,wall5]
 
 win = WinArea(590,0,50,120)
+lose =LoseArea(330,400,400,100)
+areas =[win,lose]
 
 töötab=True
 while töötab:
@@ -189,14 +207,19 @@ while töötab:
                 player.move_bol[4]=False
     
     aken.fill([255,255,255])
-    win.draw()
+    
+    for a in areas:
+        a.draw()
     for p in people:
         p.update(walls)
         p.move()
         p.draw()
+    if player.x<0 or player.x>sw or player.y <0 or player.y> sh:
+        player.__init__(80,400,(225,0,0))
+        
     for s in walls:
         s.draw()
-    
+    lose.lose(player)
     pygame.display.flip()
     pygame.time.delay(17)
 pygame.quit()
