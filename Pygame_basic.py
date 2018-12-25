@@ -173,8 +173,8 @@ wall4 =Wall(550,250,70,50)
 wall5 =Wall(450,0,40,150)
 walls =[wall1,wall2,wall3,wall4,wall5]
 
-win = WinArea(590,0,50,120)
-lose =LoseArea(330,400,400,100)
+win = WinArea(570,0,50,120)
+lose =LoseArea(330,380,400,100)
 areas =[win,lose]
 
 on=True
