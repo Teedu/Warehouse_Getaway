@@ -19,19 +19,19 @@ def gameover():
     pygame.mixer.music.load("GameOVER.mp3")
     pygame.mixer.music.play()
      
-def taustamuusika(self):
+def taustamuusika():
         
     pygame.mixer.music.load("taustamuusika.mp3")
-    pygame.mixer.music.play(self)
+    pygame.mixer.music.play()
 
-while True:
-    for i in pygame.event.get():
-        if i.type==pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        if i.type == pygame.KEYDOWN:
-            if i.key == pygame.K_SPACE:
-                taustamuusika(-1)
-            
+##while True:
+##    for i in pygame.event.get():
+##        if i.type==pygame.QUIT:
+##            pygame.quit()
+##            sys.exit()
+##        if i.type == pygame.KEYDOWN:
+##            if i.key == pygame.K_SPACE:
+##                taustamuusika(-1)
+##            
 
     
