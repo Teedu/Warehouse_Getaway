@@ -1,4 +1,6 @@
 import pygame
+import Heli
+import time
 
 sw=640
 sh=480
@@ -8,7 +10,7 @@ pygame.init()
 window = pygame.display.set_mode([sw,sh])
 
 class Person:
-    def __init__(self,x,y,colour):
+    def __init__(self,x,y,colour,drone=False,route=None):
         self.x=x
         self.y=y
         self.colour=colour
@@ -22,9 +24,14 @@ class Person:
         self.jump2=False
         self.jump_bol=True
         self.var=0
+        self.drone=drone
+        self.route=route
+        self.route_var=0
+        if self.drone==True:
+            self.set_goal()
     
     def draw(self):
-        pygame.draw.rect(window,[255,0,0],[ self.x-20, self.y-20, 40, 40],0)
+        pygame.draw.rect(window,self.colour,[ self.x-20, self.y-20, 40, 40],0)
         
     def update(self,walls):
         self.points_bol=[False,False,False,
@@ -124,6 +131,44 @@ class Person:
         self.x+=self.vx
         self.y+=self.vy
         
+    def set_goal(self):
+        try:
+            self.goal =self.route[self.route_var]
+        except IndexError:
+            self.route_var=0
+            self.set_goal()
+        if self.goal[2] != None:
+            self.t1 = time.time() + self.goal[2]
+        
+    def go(self):
+        if self.goal[0] != None and self.goal[1] != None:
+            if self.goal[0] < self.x:
+                self.move_bol[0] = True
+                self.move_bol[2] = False
+            if self.goal[0] > self.x:
+                self.move_bol[0] = False
+                self.move_bol[2] = True
+            if self.goal[0] == self.x:
+                self.move_bol[0] = False
+                self.move_bol[2] = False
+            if self.goal[1] < self.y:
+                self.move_bol[1] = True
+                self.move_bol[3] = False
+            if self.goal[1] > self.y:
+                self.move_bol[1] = False
+                self.move_bol[3] = True
+            if self.goal[y] == self.y:
+                self.move_bol[1] = False
+                self.move_bol[3] = False
+            if self.goal[0]==self.x and self.goal[1]==self.y:
+                self.route_var+=1
+                self.set_goal()
+        elif self.goal[2] != None:
+            if self.t1 < time.time():
+                self.route_var+=1
+                self.set_goal()
+        
+        
 class Wall:
     def __init__(self,x,y,w,h):
         self.x=x
@@ -161,7 +206,10 @@ class LoseArea:
         
     def lose(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
-             player.__init__(80,400,(225,0,0))
+            player.__init__(80,400,(225,0,0))
+            Heli.gameover()
+            time.sleep(0.5)
+            Heli.taustamuusika()
         
 player=Person(80,400,(225,0,0))
 people=[player]
@@ -176,6 +224,8 @@ walls =[wall1,wall2,wall3,wall4,wall5]
 win = WinArea(570,0,50,120)
 lose =LoseArea(330,380,400,100)
 areas =[win,lose]
+
+Heli.taustamuusika()
 
 on=True
 while on:
@@ -211,11 +261,16 @@ while on:
     for a in areas:
         a.draw()
     for p in people:
-        p.update(walls)
+        if p.drone==True:
+            p.go
         p.move()
+        p.update(walls)
         p.draw()
     if player.x<0 or player.x>sw or player.y <0 or player.y> sh:
         player.__init__(80,400,(225,0,0))
+        Heli.gameover()
+        time.sleep(0.5)
+        Heli.taustamuusika()
         
     for s in walls:
         s.draw()
