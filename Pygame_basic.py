@@ -1,9 +1,13 @@
-import pygame
-import Heli
-import time
+import pygame, Heli, time
 
 sw=640
 sh=480
+
+map = [[[('wall',0,0,20,480),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,400,20),('wall',460,460,240,20)],[('wall',0,0,20,400),('wall',0,0,640,20),('wall',0,460,640,20)]],
+       [[('wall',0,0,460,20),('wall',0,0,20,480),('wall',0,440,640,20)],[]]]
+
+x=0
+y=0
 
 pygame.init()
 
@@ -132,8 +136,7 @@ class Person:
         self.y+=self.vy
         
     def set_goal(self):
-        try:
-            self.goal =self.route[self.route_var]
+        try:self.goal =self.route[self.route_var]
         except IndexError:
             self.route_var=0
             self.set_goal()
@@ -167,8 +170,7 @@ class Person:
             if self.t1 < time.time():
                 self.route_var+=1
                 self.set_goal()
-        
-        
+
 class Wall:
     def __init__(self,x,y,w,h):
         self.x=x
@@ -210,27 +212,30 @@ class LoseArea:
             Heli.gameover()
             time.sleep(0.5)
             Heli.taustamuusika()
-        
+
+def set_walls():
+    ls=[]
+    for i in map[y][x]:
+        if i[0] == 'wall':
+            ls.append(Wall(i[1],i[2],i[3],i[4]))
+    return ls
+
 player=Person(80,400,(225,0,0))
 people=[player]
 
-wall1 =Wall(0,450,330,40)
-wall2 =Wall(160,400,80,200)
-wall3 =Wall(200,250,150,50)
-wall4 =Wall(550,250,70,50)
-wall5 =Wall(450,0,40,150)
-walls =[wall1,wall2,wall3,wall4,wall5]
+walls =set_walls()
 
-win = WinArea(570,0,50,120)
-lose =LoseArea(330,380,400,100)
-areas =[win,lose]
+##win = WinArea(570,0,50,120)
+##lose =LoseArea(330,380,400,100)
+areas =[]#win,lose]
 
 Heli.taustamuusika()
 
 on=True
 while on:
     for e in pygame.event.get():
-        on= win.win(player)
+        try:on= win.win(player)
+        except NameError:on=True
         if e.type == pygame.QUIT:
             on = False
         elif e.type == pygame.KEYDOWN:
@@ -266,15 +271,28 @@ while on:
         p.move()
         p.update(walls)
         p.draw()
-    if player.x<0 or player.x>sw or player.y <0 or player.y> sh:
-        player.__init__(80,400,(225,0,0))
-        Heli.gameover()
-        time.sleep(0.5)
-        Heli.taustamuusika()
+        
+    if player.x < 0:
+        x-=1
+        player.x = sw
+        walls =set_walls()
+    elif player.x>sw:
+        x+=1
+        player.x=0
+        walls =set_walls()
+    if player.y<0:
+        y-=1
+        player.y=sh
+        walls =set_walls()
+    elif player.y>sh:
+        y+=1
+        player.y=0
+        walls =set_walls()
         
     for s in walls:
         s.draw()
-    lose.lose(player)
+    try:lose.lose(player)
+    except NameError:pass
     pygame.display.flip()
     pygame.time.delay(17)
 pygame.quit()
