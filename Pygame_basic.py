@@ -6,6 +6,8 @@ sh=480
 pygame.init()
 
 window = pygame.display.set_mode([sw,sh])
+taust = pygame.image.load("forest.png") ####################################### tausta laadimine 
+sein = pygame.image.load("sein.jpg")    ####################################### seina laadimine 
 
 class Person:
     def __init__(self,x,y,colour):
@@ -133,7 +135,8 @@ class Wall:
     
     def draw(self):
         pygame.draw.rect(window,[0,0,0], [self.x, self.y, self.w, self.h],0)
-        
+        window.blit(sein, (self.x, self.y))                                     ###################################### seina lisamine
+     
 class WinArea:
     def __init__(self,x,y,w,h):
         self.x=x
@@ -207,6 +210,7 @@ while on:
                 player.move_bol[4]=False
     
     window.fill([255,255,255])
+    window.blit(taust, (0, 0))  ###################################### tausta kuvamine 
     
     for a in areas:
         a.draw()
@@ -219,6 +223,7 @@ while on:
         
     for s in walls:
         s.draw()
+        
     lose.lose(player)
     pygame.display.flip()
     pygame.time.delay(17)
