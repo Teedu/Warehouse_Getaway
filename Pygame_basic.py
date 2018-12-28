@@ -16,7 +16,7 @@ pygame.init()
 
 window = pygame.display.set_mode([sw,sh])
 taust = pygame.image.load("forest.png") ####################################### tausta laadimine
-sein = pygame.image.load("sein.jpg")    ####################################### seina laadimine
+seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
 
 class Person:
     def __init__(self,x,y,colour,drone=False,route=None):
@@ -185,7 +185,7 @@ class Wall:
 
     def draw(self):
         pygame.draw.rect(window,[0,0,0], [self.x, self.y, self.w, self.h],0)
-        window.blit(sein, (self.x, self.y))                                     ###################################### seina lisamine
+        
 
 class WinArea:
     def __init__(self,x,y,w,h):
@@ -297,7 +297,7 @@ while on:
 
     window.fill([255,255,255])
     window.blit(taust, (0, 0))  ###################################### tausta kuvamine
-
+    
     for a in areas:
         a.draw()
     for p in people:
@@ -342,7 +342,8 @@ while on:
         for i in areas:
             i.lose(player)
     except NameError:pass
-
+    
+    window.blit(seinad1, (0, 0)) 
     pygame.display.flip()
     print(pygame.mouse.get_pos())
     pygame.time.delay(17)
