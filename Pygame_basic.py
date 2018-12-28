@@ -3,7 +3,9 @@ import pygame, Heli, time
 sw=640
 sh=480
 
-map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,100,20,400),('wall',480,100,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],[('wall',0,0,640,20),('wall',0,100,20,400),('wall',0,100,100,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500)]],
+map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,140,20,400),('wall',480,140,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],
+        [('wall',0,0,640,20),('wall',0,140,20,400),('wall',0,140,150,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500),('wall',0,460,280,20),('wall',340,460,300,20),('wall',400,300,240,50),('lose area',0,400,280,60),('lose area',340,400,280,60)],
+        [('wall',0,0,20,100),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,680,20),('wall',0,150,20,330),('wall',20,240,80,220),('wall',100,320,80,140),('wall',180,400,80,60)]],
        [[('wall',0,0,400,20),('wall',0,0,20,480),('wall',0,460,640,20)],[]]
        ]
 
@@ -242,7 +244,7 @@ def set_room(name):
     elif name == 'drones':
         for i in map[y][x]:
             if i[0] == 'drone':
-                ls.append(person(i[1],i[2],i[3],i[4],i[5]))
+                ls.append(person(i[1],i[2],i[3],True,i[4]))
         return ls
 
 player=set_room('player')
@@ -273,6 +275,14 @@ while on:
                 player.move_bol[3]=True
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=True
+            if e.key == pygame.K_r:
+                x=0
+                y=0
+                walls =set_room('walls')
+                areas =set_room('areas')
+                people=set_room('drones')
+                people.append(player)
+                player.__init__(80,400,(225,0,0))
         elif e.type == pygame.KEYUP:
             if e.key == pygame.K_w:
                 player.move_bol[1]=False
