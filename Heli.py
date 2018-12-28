@@ -19,10 +19,10 @@ def gameover():
     pygame.mixer.music.load("GameOVER.mp3")
     pygame.mixer.music.play()
      
-def taustamuusika():
+def taustamuusika(self):
         
     pygame.mixer.music.load("taustamuusika.mp3")
-    pygame.mixer.music.play()
+    pygame.mixer.music.play(self)
 
 ##while True:
 ##    for i in pygame.event.get():

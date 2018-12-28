@@ -255,7 +255,7 @@ walls =set_room('walls')
 
 areas =set_room('areas')
 
-Heli.taustamuusika()
+Heli.taustamuusika(-1)
 
 on=True
 while on:
