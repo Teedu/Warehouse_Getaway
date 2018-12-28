@@ -3,8 +3,9 @@ import pygame, Heli, time
 sw=640
 sh=480
 
-map = [[[('wall',0,0,20,480),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,400,20),('wall',460,460,240,20)],[('wall',0,0,20,400),('wall',0,0,640,20),('wall',0,460,640,20)]],
-       [[('wall',0,0,460,20),('wall',0,0,20,480),('wall',0,440,640,20)],[]]]
+map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,100,20,400),('wall',480,100,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],[('wall',0,0,640,20),('wall',0,100,20,400),('wall',0,100,100,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500)]],
+       [[('wall',0,0,400,20),('wall',0,0,20,480),('wall',0,460,640,20)],[]]
+       ]
 
 x=0
 y=0
@@ -113,11 +114,11 @@ class Person:
 
         if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
             self.vx= int(self.vx * 0.75)
-        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
-            if self.vx >0:
-                self.vx=int(self.vx * 0.99)
-            if self.vx <0:
-                self.vx=int(self.vx * 0.99)
+##        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
+##            if self.vx >0:
+##                self.vx=int(self.vx * 0.99)
+##            if self.vx <0:
+##                self.vx=int(self.vx * 0.99)
                 
         if self.move_bol[1]==True:
             self.var=1
@@ -209,25 +210,45 @@ class LoseArea:
     def lose(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
             player.__init__(80,400,(225,0,0))
+            global x
+            x=0
+            global y
+            y=0
             Heli.gameover()
             time.sleep(0.5)
             Heli.taustamuusika()
 
-def set_walls():
+def set_room(name):
     ls=[]
-    for i in map[y][x]:
-        if i[0] == 'wall':
-            ls.append(Wall(i[1],i[2],i[3],i[4]))
-    return ls
+    if name == 'walls':
+        for i in map[y][x]:
+            if i[0] == 'wall':
+                ls.append(Wall(i[1],i[2],i[3],i[4]))
+        return ls
+    elif name == 'player':
+        for i in map[y][x]:
+            if i[0] == 'player':
+                return Person(i[1],i[2],i[3])
+    elif name == 'areas':
+        for i in map[y][x]:
+            if i[0] == 'lose area':
+                ls.append(LoseArea(i[1],i[2],i[3],i[4]))
+            if i[0] == 'win area':
+                ls.append(WinArea(i[1],i[2],i[3],i[4]))
+        return ls
+    elif name == 'drones':
+        for i in map[y][x]:
+            if i[0] == 'drone':
+                ls.append(person(i[1],i[2],i[3],i[4],i[5]))
+        return ls
+            
+player=set_room('player')
+people=set_room('drones')
+people.append(player)
 
-player=Person(80,400,(225,0,0))
-people=[player]
+walls =set_room('walls')
 
-walls =set_walls()
-
-##win = WinArea(570,0,50,120)
-##lose =LoseArea(330,380,400,100)
-areas =[]#win,lose]
+areas =set_room('areas')
 
 Heli.taustamuusika()
 
@@ -275,24 +296,40 @@ while on:
     if player.x < 0:
         x-=1
         player.x = sw
-        walls =set_walls()
+        walls =set_room('walls')
+        areas =set_room('areas')
+        people=set_room('drones')
+        people.append(player)
     elif player.x>sw:
         x+=1
         player.x=0
-        walls =set_walls()
+        walls =set_room('walls')
+        areas =set_room('areas')
+        people=set_room('drones')
+        people.append(player)
     if player.y<0:
         y-=1
         player.y=sh
-        walls =set_walls()
+        walls =set_room('walls')
+        areas =set_room('areas')
+        people=set_room('drones')
+        people.append(player)
     elif player.y>sh:
         y+=1
         player.y=0
-        walls =set_walls()
+        walls =set_room('walls')
+        areas =set_room('areas')
+        people=set_room('drones')
+        people.append(player)
         
     for s in walls:
         s.draw()
-    try:lose.lose(player)
+    try:
+        for i in areas:
+            i.lose(player)
     except NameError:pass
+    
     pygame.display.flip()
+    print(pygame.mouse.get_pos())
     pygame.time.delay(17)
 pygame.quit()
