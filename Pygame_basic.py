@@ -13,7 +13,7 @@ y=0
 pygame.init()
 
 window = pygame.display.set_mode([sw,sh])
-taust = pygame.image.load("taust.jpg") ####################################### tausta laadimine
+taust = pygame.image.load("taustakas.jpg") ####################################### tausta laadimine
 seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
 
 class Person:
@@ -125,12 +125,12 @@ class Person:
         elif self.drone==True:
             if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
                 self.vx=0
-                
+
         if self.move_bol[1]==True:
             self.var=1
         elif self.move_bol[4]==True:
             self.var=2
-            
+
         if self.var!=0:
             if self.jump_bol==False and self.move_bol[1]==False and self.var==1:
                 self.jump_bol=True
@@ -184,35 +184,35 @@ class Wall:
         self.y=y
         self.w=w
         self.h=h
-    
+
     def draw(self):
         pygame.draw.rect(window,[0,0,0], [self.x, self.y, self.w, self.h],0)
-        
+
 class WinArea:
     def __init__(self,x,y,w,h):
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-        
+
     def draw(self):
         pygame.draw.rect(window,(71,209,255),[self.x, self.y, self.w, self.h],0)
-        
+
     def win(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
              return False
         else: return True
-        
+
 class LoseArea:
     def __init__(self,x,y,w,h):
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-        
+
     def draw(self):
         pygame.draw.rect(window,(100,0,0),[self.x, self.y, self.w, self.h],0)
-        
+
     def lose(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
             player.__init__(80,400,(225,0,0))
@@ -296,10 +296,10 @@ while on:
                 player.move_bol[3]=False
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=False
-    
+
     window.fill([255,255,255])
     window.blit(taust, (0, 0))  ###################################### tausta kuvamine
-        
+
     try:
         for i in areas:
             if i.lose(player) == True:
@@ -309,7 +309,7 @@ while on:
                 people.append(player)
     except NameError:pass
     except AttributeError:pass
-    
+
     for a in areas:
         a.draw()
     for p in people:
@@ -326,11 +326,11 @@ while on:
                 areas =set_room('areas')
                 player.__init__(80,400,(225,0,0))
                 people.append(player)
-                
+
         p.move()
         p.update(walls)
         p.draw()
-        
+
     if player.x < 0:
         x-=1
         player.x = sw
@@ -359,13 +359,13 @@ while on:
         areas =set_room('areas')
         people=set_room('drones')
         people.append(player)
-        
+
     for s in walls:
         s.draw()
-    
+
     if x==0 and y==0:
         window.blit(seinad1, (0, 0))
-    
+
     pygame.display.flip()
     pygame.time.delay(17)
 pygame.quit()
