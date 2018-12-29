@@ -15,7 +15,7 @@ y=0
 pygame.init()
 
 window = pygame.display.set_mode([sw,sh])
-taust = pygame.image.load("forest.png") ####################################### tausta laadimine
+taust = pygame.image.load("taustakas.jpg") ####################################### tausta laadimine
 seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
 
 class Person:
