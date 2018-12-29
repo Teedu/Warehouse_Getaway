@@ -15,6 +15,8 @@ pygame.init()
 window = pygame.display.set_mode([sw,sh])
 taust = pygame.image.load("taustakas.jpg") ####################################### tausta laadimine
 seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
+seinad2 = pygame.image.load("level2.png")
+seinad3 = pygame.image.load("level3.png")
 
 class Person:
     def __init__(self,x,y,colour,drone=False,route=None):
@@ -364,6 +366,10 @@ while on:
 
     if x==0 and y==0:
         window.blit(seinad1, (0, 0))
+    elif x==1 and y==0:
+        window.blit(seinad2, (0, 0))
+    elif x==2 and y==0:
+        window.blit(seinad3, (0, 0))
 
     pygame.display.flip()
     pygame.time.delay(17)
