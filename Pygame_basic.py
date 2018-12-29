@@ -16,7 +16,7 @@ pygame.init()
 
 window = pygame.display.set_mode([sw,sh])
 taust = pygame.image.load("forest.png") ####################################### tausta laadimine
-seinad1 = pygame.image.load("level3.png")    ####################################### seina laadimine
+seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
 
 class Person:
     def __init__(self,x,y,colour,drone=False,route=None):
