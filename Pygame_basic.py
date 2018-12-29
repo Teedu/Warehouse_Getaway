@@ -297,7 +297,6 @@ while on:
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=False
 
-    window.fill([255,255,255])
     window.blit(taust, (0, 0))  ###################################### tausta kuvamine
 
     try:
