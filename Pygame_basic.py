@@ -3,10 +3,8 @@ import pygame, Heli, time
 sw=640
 sh=480
 
-map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,140,20,400),('wall',480,140,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],
-        [('wall',0,0,640,20),('wall',0,140,20,400),('wall',0,140,150,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500),('wall',0,460,280,20),('wall',340,460,300,20),('wall',400,300,240,50),('lose area',0,400,280,60),('lose area',340,400,280,60)],
-        [('wall',0,0,20,100),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,680,20),('wall',0,150,20,330),('wall',20,240,80,220),('wall',100,320,80,140),('wall',180,400,80,60)]],
-       [[('wall',0,0,400,20),('wall',0,0,20,480),('wall',0,460,640,20)],[]]
+map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,140,20,400),('wall',480,140,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],[('wall',0,0,640,20),('wall',0,140,20,400),('wall',0,140,150,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500),('wall',0,460,280,20),('wall',340,460,300,20),('wall',400,300,240,50),('lose area',0,400,280,60),('lose area',340,400,280,60)],[('wall',0,0,20,100),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,680,20),('wall',0,150,20,330),('wall',20,240,80,220),('wall',100,320,80,140),('wall',180,400,80,60),('drone',280,440,(0,255,0),((280,440,None),(580,440,None)))],[('wall',0,0,640,20),('wall',0,0,20,400),('wall',620,0,20,480),('wall',0,460,190,100),('wall',280,460,360,100),('wall',130,240,60,240),('wall',130,180,310,60),('lose area',280,420,120,40)]],
+       [[],[('wall',0,0,20,480),('wall',0,0,280,20),('wall',340,0,280,20),('wall',0,460,640,20),('wall',480,280,140,60),('wall',620,280,20,200)],[('wall',0,0,640,20),('wall',0,280,20,200),('wall',0,460,640,20),('wall',620,400,20,80),('wall',620,0,20,340),('wall',150,0,60,320),('wall',440,160,60,380),('wall',350,100,150,60)],[('wall',0,460,640,20),('wall',620,0,20,480),('wall',0,0,20,340),('wall',0,400,20,80),('wall',0,0,190,20),('wall',280,0,360,20),('wall',340,360,60,120),('wall',410,320,60,160),('wall',480,400,60,100),('win area',410,260,60,60)]]
        ]
 
 x=0
@@ -15,7 +13,7 @@ y=0
 pygame.init()
 
 window = pygame.display.set_mode([sw,sh])
-taust = pygame.image.load("forest.png") ####################################### tausta laadimine
+taust = pygame.image.load("taust.jpg") ####################################### tausta laadimine
 seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
 
 class Person:
@@ -116,19 +114,23 @@ class Person:
             self.jump2=False
             self.jump_bol=False
 
-        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
-            self.vx= int(self.vx * 0.75)
-##        if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
-##            if self.vx >0:
-##                self.vx=int(self.vx * 0.99)
-##            if self.vx <0:
-##                self.vx=int(self.vx * 0.99)
-
+        if self.drone==False:
+            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
+                self.vx= int(self.vx * 0.75)
+##            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
+##                if self.vx >0:
+##                    self.vx=int(self.vx * 0.99)
+##                if self.vx <0:
+##                    self.vx=int(self.vx * 0.99)
+        elif self.drone==True:
+            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
+                self.vx=0
+                
         if self.move_bol[1]==True:
             self.var=1
         elif self.move_bol[4]==True:
             self.var=2
-
+            
         if self.var!=0:
             if self.jump_bol==False and self.move_bol[1]==False and self.var==1:
                 self.jump_bol=True
@@ -182,36 +184,35 @@ class Wall:
         self.y=y
         self.w=w
         self.h=h
-
+    
     def draw(self):
         pygame.draw.rect(window,[0,0,0], [self.x, self.y, self.w, self.h],0)
         
-
 class WinArea:
     def __init__(self,x,y,w,h):
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-
+        
     def draw(self):
         pygame.draw.rect(window,(71,209,255),[self.x, self.y, self.w, self.h],0)
-
+        
     def win(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
              return False
         else: return True
-
+        
 class LoseArea:
     def __init__(self,x,y,w,h):
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-
+        
     def draw(self):
         pygame.draw.rect(window,(100,0,0),[self.x, self.y, self.w, self.h],0)
-
+        
     def lose(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
             player.__init__(80,400,(225,0,0))
@@ -221,7 +222,9 @@ class LoseArea:
             y=0
             Heli.gameover()
             time.sleep(0.5)
-            Heli.taustamuusika()
+            Heli.taustamuusika(-1)
+            return True
+        else:return False
 
 def set_room(name):
     ls=[]
@@ -232,6 +235,7 @@ def set_room(name):
         return ls
     elif name == 'player':
         for i in map[y][x]:
+            print(i[0])
             if i[0] == 'player':
                 return Person(i[1],i[2],i[3])
     elif name == 'areas':
@@ -244,7 +248,7 @@ def set_room(name):
     elif name == 'drones':
         for i in map[y][x]:
             if i[0] == 'drone':
-                ls.append(person(i[1],i[2],i[3],True,i[4]))
+                ls.append(Person(i[1],i[2],i[3],True,i[4]))
         return ls
 
 player=set_room('player')
@@ -260,8 +264,6 @@ Heli.taustamuusika(-1)
 on=True
 while on:
     for e in pygame.event.get():
-        try:on= win.win(player)
-        except NameError:on=True
         if e.type == pygame.QUIT:
             on = False
         elif e.type == pygame.KEYDOWN:
@@ -294,19 +296,41 @@ while on:
                 player.move_bol[3]=False
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=False
-
+    
     window.fill([255,255,255])
     window.blit(taust, (0, 0))  ###################################### tausta kuvamine
+        
+    try:
+        for i in areas:
+            if i.lose(player) == True:
+                walls =set_room('walls')
+                areas =set_room('areas')
+                people=set_room('drones')
+                people.append(player)
+    except NameError:pass
+    except AttributeError:pass
     
     for a in areas:
         a.draw()
     for p in people:
         if p.drone==True:
-            p.go
+            p.go()
+            if player.x in range(p.x-20,p.x+20) and player.y in range(p.y-20,p.y+20):
+                x=0
+                y=0
+                Heli.gameover()
+                time.sleep(0.5)
+                Heli.taustamuusika(-1)
+                people=set_room('drones')
+                walls =set_room('walls')
+                areas =set_room('areas')
+                player.__init__(80,400,(225,0,0))
+                people.append(player)
+                
         p.move()
         p.update(walls)
         p.draw()
-
+        
     if player.x < 0:
         x-=1
         player.x = sw
@@ -335,16 +359,13 @@ while on:
         areas =set_room('areas')
         people=set_room('drones')
         people.append(player)
-
+        
     for s in walls:
         s.draw()
-    try:
-        for i in areas:
-            i.lose(player)
-    except NameError:pass
     
-    window.blit(seinad1, (0, 0)) 
+    if x==0 and y==0:
+        window.blit(seinad1, (0, 0))
+    
     pygame.display.flip()
-    print(pygame.mouse.get_pos())
     pygame.time.delay(17)
 pygame.quit()
