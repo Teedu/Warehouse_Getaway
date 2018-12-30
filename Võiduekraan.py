@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from Heli import success
 
 pygame.init()
@@ -6,7 +6,7 @@ window = pygame.display.set_mode([640, 480])
 red = [255,0,0]
 taust = pygame.image.load("menüütaust.png")
 
-def võiduekraan():
+def võiduekraan(koguaeg):
     
     success()
     
@@ -38,5 +38,7 @@ def võiduekraan():
         window.blit(pygame.font.Font(None, 70).render("You won!", 1,[0,0,0]), (210, 120))
         window.blit(pygame.font.Font(None, 30).render("Retry", 1,[0,0,0]), (295, 211))
         window.blit(pygame.font.Font(None, 30).render("Quit", 1,[0,0,0]), (297, 262))
+        window.blit(pygame.font.Font(None, 30).render(koguaeg, 1,[0,0,0]), (320, 170))
+        window.blit(pygame.font.Font(None, 30).render("Time:", 1,[0,0,0]), (255, 170))
         
         pygame.display.update()
