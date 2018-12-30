@@ -4,7 +4,7 @@ sw=640
 sh=480
 
 map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,140,20,400),('wall',480,140,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],[('wall',0,0,640,20),('wall',0,140,20,400),('wall',0,140,150,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500),('wall',0,460,280,20),('wall',340,460,300,20),('wall',400,300,240,50),('lose area',0,400,280,60),('lose area',340,400,280,60)],[('wall',0,0,20,100),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,680,20),('wall',0,150,20,330),('wall',20,240,80,220),('wall',100,320,80,140),('wall',180,400,80,60),('drone',280,440,(0,255,0),((280,440,None),(580,440,None)))],[('wall',0,0,640,20),('wall',0,0,20,400),('wall',620,0,20,480),('wall',0,460,190,100),('wall',280,460,360,100),('wall',130,240,60,240),('wall',130,180,310,60),('lose area',280,420,120,40)]],
-       [[],[('wall',0,0,20,480),('wall',0,0,280,20),('wall',340,0,280,20),('wall',0,460,640,20),('wall',480,280,140,60),('wall',620,280,20,200)],[('wall',0,0,640,20),('wall',0,280,20,200),('wall',0,460,640,20),('wall',620,400,20,80),('wall',620,0,20,340),('wall',150,0,60,320),('wall',440,160,60,380),('wall',350,100,150,60)],[('wall',0,460,640,20),('wall',620,0,20,480),('wall',0,0,20,340),('wall',0,400,20,80),('wall',0,0,190,20),('wall',280,0,360,20),('wall',340,360,60,120),('wall',410,320,60,160),('wall',480,400,60,100),('win area',410,260,60,60)]]
+       [[],[('wall',0,0,20,480),('wall',0,0,280,20),('wall',340,0,280,20),('wall',0,460,640,60),('wall',480,280,140,60),('wall',620,280,20,200)],[('wall',0,0,640,20),('wall',0,280,20,200),('wall',0,460,640,20),('wall',620,400,20,80),('wall',620,0,20,340),('wall',150,0,60,320),('wall',440,160,60,380),('wall',350,100,150,60)],[('wall',0,460,640,20),('wall',620,0,20,480),('wall',0,0,20,340),('wall',0,400,20,80),('wall',0,0,190,20),('wall',280,0,360,20),('wall',340,360,60,120),('wall',410,320,60,160),('wall',480,400,60,100),('win area',410,260,60,60)]]
        ]
 
 x=0
@@ -17,6 +17,12 @@ taust = pygame.image.load("taustakas.jpg") #####################################
 seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
 seinad2 = pygame.image.load("level2.png")
 seinad3 = pygame.image.load("level3.png")
+seinad4 = pygame.image.load("level4.png")
+seinad5 = pygame.image.load("level5.png")
+seinad6 = pygame.image.load("level6.png")
+seinad7 = pygame.image.load("level7.png")
+robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]
+
 
 class Person:
     def __init__(self,x,y,colour,drone=False,route=None):
@@ -38,9 +44,20 @@ class Person:
         self.route_var=0
         if self.drone==True:
             self.set_goal()
+            self.r=0
 
     def draw(self):
-        pygame.draw.rect(window,self.colour,[ self.x-20, self.y-20, 40, 40],0)
+        if self.drone==True:
+            if self.vx<0:
+                window.blit(robot[self.r],(self.x-20,self.y-20))
+            elif self.vx>0:
+                window.blit(pygame.transform.flip(robot[self.r], True, False),(self.x-20,self.y-20))
+            if self.r==0:
+                self.r=1
+            elif self.r==1:
+                self.r=0
+        else:
+            pygame.draw.rect(window,self.colour,[ self.x-20, self.y-20, 40, 40],0)
 
     def update(self,walls):
         self.points_bol=[False,False,False,
