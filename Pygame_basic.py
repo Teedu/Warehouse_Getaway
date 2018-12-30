@@ -237,7 +237,6 @@ def set_room(name):
         return ls
     elif name == 'player':
         for i in map[y][x]:
-            print(i[0])
             if i[0] == 'player':
                 return Person(i[1],i[2],i[3])
     elif name == 'areas':
@@ -370,7 +369,7 @@ while on:
         window.blit(seinad2, (0, 0))
     elif x==2 and y==0:
         window.blit(seinad3, (0, 0))
-
+ 
     pygame.display.flip()
     pygame.time.delay(17)
 pygame.quit()
