@@ -410,6 +410,14 @@ while on:
 
     if win ==True:
         võiduekraan()
+        x=0
+        y=0
+        walls =set_room('walls')
+        areas =set_room('areas')
+        people=set_room('drones')
+        player.__init__(80,400,(225,0,0))
+        people.append(player)
+        Heli.taustamuusika(-1)
 
     pygame.display.flip()
     pygame.time.delay(17)
