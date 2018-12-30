@@ -111,9 +111,14 @@ class Person:# Klass mis kehtib kõigele mis liigub
         elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[1]==True:#saab mööda seina üles liikuda
             self.vy=-5
 
-        if (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[4]==True and self.jump_bol==True:#esimene hüppe
+        if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:#esimene hüppe
             self.vy=-10
             self.vx= 5
+            self.jump1 =False
+            self.jump_bol=False
+        elif self.points_bol[5]==True and self.move_bol[4]==True and self.jump_bol==True:
+            self.vy=-10
+            self.vx=-5
             self.jump1 =False
             self.jump_bol=False
 
