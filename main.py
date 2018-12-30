@@ -18,13 +18,13 @@ menüü()#teeb lahti starrt menüü
 
 window = pygame.display.set_mode([sw,sh])# teeb akna
 taust = pygame.image.load("taustakas.jpg") #tausta laadimine
-seinad1 = pygame.image.load("level1.png")    #seina laadimine
-seinad2 = pygame.image.load("level2.png")
-seinad3 = pygame.image.load("level3.png")
-seinad4 = pygame.image.load("level4.png")
-seinad5 = pygame.image.load("level5.png")
-seinad6 = pygame.image.load("level6.png")
-seinad7 = pygame.image.load("level7.png")
+seinad1 = pygame.image.load("levels/level1.png")    #seina laadimine
+seinad2 = pygame.image.load("levels/level2.png")
+seinad3 = pygame.image.load("levels/level3.png")
+seinad4 = pygame.image.load("levels/level4.png")
+seinad5 = pygame.image.load("levels/level5.png")
+seinad6 = pygame.image.load("levels/level6.png")
+seinad7 = pygame.image.load("levels/level7.png")
 robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]#roboti laadimine
 
 
