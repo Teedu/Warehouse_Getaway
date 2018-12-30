@@ -30,6 +30,7 @@ robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]#ro
 
 class Person:# Klass mis kehtib kõigele mis liigub
     def __init__(self,x,y,colour,drone=False,route=None):# sulgudess tulvad alg kordinaadid, värv(kuid seda polnud lõpuks vaja kuna kasutasime hoopis pilte), kas see on robot või mängija ja see kuhu see läheks kui see on robot
+        algus=time.time()
         self.x=x
         self.y=y
         self.colour=colour
@@ -241,6 +242,8 @@ class LoseArea:#ala milles seistas kaotad
             Heli.gameover()
             time.sleep(0.5)
             Heli.taustamuusika(-1)
+            algus = time.time()
+            print(algus)
             return True
         else:return False
 
@@ -277,7 +280,8 @@ walls =set_room('walls')
 areas =set_room('areas')
 
 Heli.taustamuusika(-1)#paneb muurika tööle
-
+algus = time.time()
+print(algus)
 on=True
 while on:
     for e in pygame.event.get():
@@ -315,9 +319,9 @@ while on:
                 player.move_bol[4]=False
 
     window.blit(taust, (0, 0))  #joonistab tausta
-    
+
     win =False
-    
+
     try:
         for i in areas:#kontrollib kas mängija on kaotamis alas
             if i.lose(player) == True:
@@ -331,11 +335,13 @@ while on:
     for a in areas:#joonistab alad
         a.draw()
     for p in people:#teeb kõik mis isikud peavad tegema
-        if p.drone==True:#teeb kõik mis on robit peab tegema 
+        if p.drone==True:#teeb kõik mis on robit peab tegema
             p.go()
             if player.x in range(p.x-20,p.x+20) and player.y in range(p.y-20,p.y+20):
                 x=0
                 y=0
+                algus = time.time()
+                print(algus)
                 Heli.gameover()
                 time.sleep(0.5)
                 Heli.taustamuusika(-1)
@@ -400,8 +406,11 @@ while on:
     except NameError:pass
     except AttributeError:pass
 
-    if win ==True:#kui on võidu alas teeb asju
-        võiduekraan()
+    if win == True:#kui on võidu alas teeb asju
+        lõpp = time.time()
+        koguaeg = str(round(lõpp - algus, 2))+" s"
+        print(koguaeg)
+        võiduekraan(koguaeg)
         x=0
         y=0
         walls =set_room('walls')
@@ -410,6 +419,7 @@ while on:
         player.__init__(80,400,(225,0,0))
         people.append(player)
         Heli.taustamuusika(-1)
+        algus = time.time()
 
     pygame.display.flip()
     pygame.time.delay(17)
