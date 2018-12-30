@@ -15,6 +15,7 @@ y=0
 pygame.init()
 
 menüü()
+algus = time.time()
 
 window = pygame.display.set_mode([sw,sh])
 taust = pygame.image.load("taustakas.jpg") ####################################### tausta laadimine
@@ -30,7 +31,6 @@ robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]
 
 class Person:
     def __init__(self,x,y,colour,drone=False,route=None):
-        algus = time.time()
         self.x=x
         self.y=y
         self.colour=colour
@@ -247,8 +247,8 @@ class LoseArea:
             Heli.gameover()
             time.sleep(0.5)
             Heli.taustamuusika(-1)
+            global algus
             algus = time.time()
-            print(algus)
             return True
         else:return False
 
@@ -285,8 +285,7 @@ walls =set_room('walls')
 areas =set_room('areas')
 
 Heli.taustamuusika(-1)
-algus = time.time()
-print(algus)
+
 on=True
 while on:
     for e in pygame.event.get():
@@ -345,8 +344,6 @@ while on:
             if player.x in range(p.x-20,p.x+20) and player.y in range(p.y-20,p.y+20):
                 x=0
                 y=0
-                algus = time.time()
-                print(algus)
                 Heli.gameover()
                 time.sleep(0.5)
                 Heli.taustamuusika(-1)
@@ -354,7 +351,8 @@ while on:
                 walls =set_room('walls')
                 areas =set_room('areas')
                 player.__init__(80,400,(225,0,0))
-                people.append(player)
+                people.append(player)            
+                algus = time.time()
 
         p.move()
         p.update(walls)
@@ -416,6 +414,7 @@ while on:
 
     if win == True:
         lõpp = time.time()
+        print(lõpp)
         koguaeg = str(round(lõpp - algus, 2))+" s"
         print(koguaeg)
         võiduekraan(koguaeg)
