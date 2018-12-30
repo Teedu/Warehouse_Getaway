@@ -1,5 +1,6 @@
 import pygame, Heli, time
 from StartMenu import menüü
+from Võiduekraan import võiduekraan
 
 sw=640
 sh=480
@@ -10,8 +11,6 @@ map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('w
 
 x=0
 y=0
-
-win =False
 
 pygame.init()
 
@@ -224,8 +223,8 @@ class WinArea:
 
     def win(self,player):
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
-             return False
-        else: return True
+             return True
+        else: return False
 
 class LoseArea:
     def __init__(self,x,y,w,h):
@@ -283,6 +282,8 @@ walls =set_room('walls')
 areas =set_room('areas')
 
 Heli.taustamuusika(-1)
+
+win =False
 
 on=True
 while on:
@@ -403,12 +404,12 @@ while on:
     try:
         for i in areas:
             if i.win(player) == True:
-                print(a)
+                win=True
     except NameError:pass
     except AttributeError:pass
 
     if win ==True:
-        on =False
+        võiduekraan()
 
     pygame.display.flip()
     pygame.time.delay(17)
