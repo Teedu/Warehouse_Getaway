@@ -11,6 +11,8 @@ map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('w
 x=0
 y=0
 
+win =False
+
 pygame.init()
 
 menüü()
@@ -397,6 +399,16 @@ while on:
         window.blit(seinad6, (0, 0))
     elif x==1 and y==1:
         window.blit(seinad7, (0, 0))
+
+    try:
+        for i in areas:
+            if i.win(player) == True:
+                print(a)
+    except NameError:pass
+    except AttributeError:pass
+
+    if win ==True:
+        on =False
 
     pygame.display.flip()
     pygame.time.delay(17)
