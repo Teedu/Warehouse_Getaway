@@ -283,8 +283,6 @@ areas =set_room('areas')
 
 Heli.taustamuusika(-1)
 
-win =False
-
 on=True
 while on:
     for e in pygame.event.get():
@@ -322,7 +320,9 @@ while on:
                 player.move_bol[4]=False
 
     window.blit(taust, (0, 0))  ###################################### tausta kuvamine
-
+    
+    win =False
+    
     try:
         for i in areas:
             if i.lose(player) == True:

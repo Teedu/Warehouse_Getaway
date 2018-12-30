@@ -40,5 +40,3 @@ def võiduekraan():
         window.blit(pygame.font.Font(None, 30).render("Quit", 1,[0,0,0]), (297, 262))
         
         pygame.display.update()
-
-võiduekraan()
