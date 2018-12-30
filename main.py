@@ -1,4 +1,5 @@
 import pygame, Heli, time
+from StartMenu import menüü
 
 sw=640
 sh=480
@@ -11,6 +12,8 @@ x=0
 y=0
 
 pygame.init()
+
+menüü()
 
 window = pygame.display.set_mode([sw,sh])
 taust = pygame.image.load("taustakas.jpg") ####################################### tausta laadimine
@@ -381,7 +384,7 @@ while on:
         window.blit(seinad6, (0, 0))
     elif x==1 and y==1:
         window.blit(seinad7, (0, 0))
-     
+    
     pygame.display.flip()
     pygame.time.delay(17)
 pygame.quit()
