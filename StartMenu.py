@@ -53,7 +53,7 @@ def menüü():
             if klik[0] == 1:
                 pygame.quit()
         
-        window.blit(pygame.font.Font(None, 70).render("Mad Mayhem", 1,[0,0,0]), (170, 120))
+        window.blit(pygame.font.Font(None, 70).render("Warehouse Getaway", 1,[0,0,0]), (85, 120))
         window.blit(pygame.font.Font(None, 30).render("Start", 1,[0,0,0]), (295, 210))
         window.blit(pygame.font.Font(None, 30).render("Controls", 1,[0,0,0]), (277, 262))
         window.blit(pygame.font.Font(None, 30).render("Quit", 1,[0,0,0]), (297, 312))
