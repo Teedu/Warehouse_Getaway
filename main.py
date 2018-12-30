@@ -27,7 +27,11 @@ seinad5 = pygame.image.load("levels/level5.png")
 seinad6 = pygame.image.load("levels/level6.png")
 seinad7 = pygame.image.load("levels/level7.png")
 robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]#roboti laadimine
-
+jooks=[pygame.image.load("mängija_jooks/jooks1.png"),pygame.image.load("mängija_jooks/jooks2.png"),pygame.image.load("mängija_jooks/jooks3.png"),pygame.image.load("mängija_jooks/jooks4.png"),pygame.image.load("mängija_jooks/jooks5.png"),pygame.image.load("mängija_jooks/jooks6.png"),pygame.image.load("mängija_jooks/jooks7.png"),pygame.image.load("mängija_jooks/jooks8.png"),pygame.image.load("mängija_jooks/jooks9.png"),pygame.image.load("mängija_jooks/jooks10.png"),pygame.image.load("mängija_jooks/jooks11.png"),pygame.image.load("mängija_jooks/jooks12.png"),pygame.image.load("mängija_jooks/jooks13.png")]
+seis=pygame.image.load("seis.png")
+ronimine=[pygame.image.load("ronimine/ronimine1.png"),pygame.image.load("ronimine/ronimine2.png"),pygame.image.load("ronimine/ronimine3.png"),pygame.image.load("ronimine/ronimine4.png")]
+huppamine=pygame.image.load('huppamine.png')
+kukkumine=pygame.image.load('kukkumine.png')
 
 class Person:
     def __init__(self,x,y,colour,drone=False,route=None):
@@ -49,7 +53,8 @@ class Person:
         self.route_var=0
         if self.drone==True:
             self.set_goal()
-            self.r=0
+        self.r=0
+        self.ro=0
 
     def draw(self):#joonistab tegelase
         if self.drone==True:#joonistab roboti
@@ -62,7 +67,34 @@ class Person:
             elif self.r==1:
                 self.r=0
         else:#joonistab tegelase mis pole robot
-            pygame.draw.rect(window,self.colour,[ self.x-20, self.y-20, 40, 40],0)
+            if self.ro>3:
+                self.ro=0
+            if self.points_bol[5]==True:
+                 window.blit(ronimine[self.ro],(self.x-20,self.y-20))
+            elif self.points_bol[3]==True:
+                 window.blit(pygame.transform.flip(ronimine[self.ro], True, False),(self.x-20,self.y-20))
+            elif self.vx == 0 and self.points_bol[7]==True:
+                window.blit(seis,(self.x-20,self.y-20))
+            elif self.vx>0 and self.points_bol[7]==True:
+                window.blit(jooks[self.r],(self.x-20,self.y-20))
+                self.r+=1
+            elif self.vx<0 and self.points_bol[7]==True:
+                window.blit(pygame.transform.flip(jooks[self.r], True, False),(self.x-20,self.y-20))
+                self.r+=1
+            elif self.vy<0 and self.vx>0:
+                 window.blit(huppamine,(self.x-20,self.y-20))
+            elif self.vy<0 and self.vx==0:
+                 window.blit(huppamine,(self.x-20,self.y-20))
+            elif self.vy<0 and self.vx<0:
+                 window.blit(pygame.transform.flip(kukkumine, True, False),(self.x-20,self.y-20))
+            elif self.vy>0 and self.vx>0:
+                 window.blit(huppamine,(self.x-20,self.y-20))
+            elif self.vy>0 and self.vx<0:
+                 window.blit(pygame.transform.flip(kukkumine, True, False),(self.x-20,self.y-20))
+            elif self.vy>0 and self.vx==0:
+                 window.blit(kukkumine,(self.x-20,self.y-20))
+            if self.r>12:
+                self.r=0
 
     def update(self,walls):#vaaab kas tegelane puudutab midagi
         self.points_bol=[False,False,False,#nullib ära
@@ -108,8 +140,10 @@ class Person:
             self.vy =0
         elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[3]==True:#saab mööda seina alla liikuda
             self.vy= 5
+            self.ro+=1
         elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[1]==True:#saab mööda seina üles liikuda
             self.vy=-5
+            self.ro+=1
 
         if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:#esimene hüppe
             self.vy=-10
