@@ -375,11 +375,11 @@ while on:
         window.blit(seinad3, (0, 0))
     elif x==3 and y==0:
         window.blit(seinad4, (0, 0))
-    elif x==4 and y==0:
+    elif x==3 and y==1:
         window.blit(seinad5, (0, 0))
-    elif x==5 and y==0:
+    elif x==2 and y==1:
         window.blit(seinad6, (0, 0))
-    elif x==6 and y==0:
+    elif x==1 and y==1:
         window.blit(seinad7, (0, 0))
      
     pygame.display.flip()
