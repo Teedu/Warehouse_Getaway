@@ -2,31 +2,31 @@ import pygame, Heli, time
 from StartMenu import menüü
 from Võiduekraan import võiduekraan
 
-sw=640
+sw=640#ekraani suuruse muutuja
 sh=480
 
 map = [[[('player',80,400,(225,0,0)),('wall',0,0,20,480),('wall',0,0,640,20),('wall',0,460,640,20),('wall',620,140,20,400),('wall',480,140,200,50),('wall',480,280,280,60),('wall',300,0,80,200),('wall',200,300,80,300),('wall',346,391,70,100),('lose area',280,404,350,100)],[('wall',0,0,640,20),('wall',0,140,20,400),('wall',0,140,150,50),('wall',620,0,20,100),('wall',520,150,100,50),('wall',620,150,20,500),('wall',0,460,280,20),('wall',340,460,300,20),('wall',400,300,240,50),('lose area',0,400,280,60),('lose area',340,400,280,60)],[('wall',0,0,20,100),('wall',0,0,640,20),('wall',620,0,20,400),('wall',0,460,680,20),('wall',0,150,20,330),('wall',20,240,80,220),('wall',100,320,80,140),('wall',180,400,80,60),('drone',280,440,(0,255,0),((280,440,None),(580,440,None)))],[('wall',0,0,640,20),('wall',0,0,20,400),('wall',620,0,20,480),('wall',0,460,190,100),('wall',280,460,360,100),('wall',130,240,60,240),('wall',130,180,310,60),('lose area',280,420,120,40)]],
        [[],[('wall',0,0,20,480),('wall',0,0,280,20),('wall',340,0,280,20),('wall',0,460,640,60),('wall',480,280,140,60),('wall',620,280,20,200)],[('wall',0,0,640,20),('wall',0,280,20,200),('wall',0,460,640,20),('wall',620,400,20,80),('wall',620,0,20,340),('wall',150,0,60,320),('wall',440,160,60,380),('wall',350,100,150,60)],[('wall',0,460,640,20),('wall',620,0,20,480),('wall',0,0,20,340),('wall',0,400,20,80),('wall',0,0,190,20),('wall',280,0,360,20),('wall',340,360,60,120),('wall',410,320,60,160),('wall',480,400,60,100),('win area',410,260,60,60)]]
-       ]
+       ]# list, mis koosneb korrustest, mis on listid, mis koosnevad tubadest, mis koosnevad kõikidest seintest ja tegelastest kes seal ilmuvad
 
-x=0
-y=0
+x=0#näitab mitmendas toas tekitakse
+y=0#näitab mitmendal korrusel tekitakse
 
 pygame.init()
 
 menüü()
 algus = time.time()
 
-window = pygame.display.set_mode([sw,sh])
-taust = pygame.image.load("taustakas.jpg") ####################################### tausta laadimine
-seinad1 = pygame.image.load("level1.png")    ####################################### seina laadimine
-seinad2 = pygame.image.load("level2.png")
-seinad3 = pygame.image.load("level3.png")
-seinad4 = pygame.image.load("level4.png")
-seinad5 = pygame.image.load("level5.png")
-seinad6 = pygame.image.load("level6.png")
-seinad7 = pygame.image.load("level7.png")
-robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]
+window = pygame.display.set_mode([sw,sh])# teeb akna
+taust = pygame.image.load("taustakas.jpg") #tausta laadimine
+seinad1 = pygame.image.load("levels/level1.png")    #seina laadimine
+seinad2 = pygame.image.load("levels/level2.png")
+seinad3 = pygame.image.load("levels/level3.png")
+seinad4 = pygame.image.load("levels/level4.png")
+seinad5 = pygame.image.load("levels/level5.png")
+seinad6 = pygame.image.load("levels/level6.png")
+seinad7 = pygame.image.load("levels/level7.png")
+robot=[pygame.image.load("uusrobot.png"),pygame.image.load("uus_robot2.png")]#roboti laadimine
 
 
 class Person:
@@ -36,12 +36,12 @@ class Person:
         self.colour=colour
         self.vx=0
         self.vy=0
-        self.points_bol=[False,False,False,
+        self.points_bol=[False,False,False,# 9 punkti ruudu peal mis on true kui see puudutab seina ja false kui ei puuduta
                          False,False,False,
                          False,False,False]
-        self.move_bol=[False,False,False,False,False]
-        self.jump1=False
-        self.jump2=False
+        self.move_bol=[False,False,False,False,False]# näitab mis klahve vajutatakse
+        self.jump1=False# näitab kas on võimalik teha esimest hüpet
+        self.jump2=False# näitab kas on võimalik teha teist hüpet
         self.jump_bol=True
         self.var=0
         self.drone=drone
@@ -51,8 +51,8 @@ class Person:
             self.set_goal()
             self.r=0
 
-    def draw(self):
-        if self.drone==True:
+    def draw(self):#joonistab tegelase
+        if self.drone==True:#joonistab roboti
             if self.vx<0:
                 window.blit(robot[self.r],(self.x-20,self.y-20))
             elif self.vx>0:
@@ -61,15 +61,15 @@ class Person:
                 self.r=1
             elif self.r==1:
                 self.r=0
-        else:
+        else:#joonistab tegelase mis pole robot
             pygame.draw.rect(window,self.colour,[ self.x-20, self.y-20, 40, 40],0)
 
-    def update(self,walls):
-        self.points_bol=[False,False,False,
+    def update(self,walls):#vaaab kas tegelane puudutab midagi
+        self.points_bol=[False,False,False,#nullib ära
                          False,False,False,
                          False,False,False]
         self.jump1=False
-        for s in walls:
+        for s in walls:#kontrollib ära
             if self.x in range(s.x, s.x+s.w) and self.y + 20 in range(s.y,s.y+s.h):
                 self.points_bol[7]=True
                 self.y =s.y-20
@@ -98,20 +98,20 @@ class Person:
             elif self.x-20 in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
                 self.points_bol[0]=True
 
-    def move(self):
-        if self.points_bol[7] == True:
+    def move(self):#liigutab tegelast
+        if self.points_bol[7] == True:#kui seisab millegi peal kiirus alla on null
             self.vy = 0
-        elif self.points_bol[7] == False:
+        elif self.points_bol[7] == False:#kui ei seisa millegi peal siis hakkab alla kiirendama
             self.vy +=1
 
-        if (self.move_bol[3]==False and self.move_bol[1]==False) and (self.points_bol[3]==True or self.points_bol[5]==True):
+        if (self.move_bol[3]==False and self.move_bol[1]==False) and (self.points_bol[3]==True or self.points_bol[5]==True):# kui seisab selja küljel siis ei kukku alla
             self.vy =0
-        elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[3]==True:
+        elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[3]==True:#saab mööda seina alla liikuda
             self.vy= 5
-        elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[1]==True:
+        elif (self.points_bol[3]==True or self.points_bol[5]==True) and self.move_bol[1]==True:#saab mööda seina üles liikuda
             self.vy=-5
 
-        if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:
+        if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:#esimene hüppe
             self.vy=-10
             self.vx= 5
             self.jump1 =False
@@ -122,14 +122,14 @@ class Person:
             self.jump1 =False
             self.jump_bol=False
 
-        if self.move_bol[0]==True and self.move_bol[2]==True:
+        if self.move_bol[0]==True and self.move_bol[2]==True:#kui hoiab all nii vasakut ja paremat ei liigu mitte midagi
             self.vx =0
-        elif self.move_bol[0]==True and self.points_bol[3] != True:
+        elif self.move_bol[0]==True and self.points_bol[3] != True:#liigub vasakule
             self.vx=-5
-        elif self.move_bol[2]==True and self.points_bol[5] != True:
+        elif self.move_bol[2]==True and self.points_bol[5] != True:#liigub paremale
             self.vx= 5
 
-        if (self.move_bol[1]==True or self.move_bol[4]==True) and self.jump1==True and not (self.points_bol[3]==True or self.points_bol[5]==True) and self.jump_bol==True:
+        if (self.move_bol[1]==True or self.move_bol[4]==True) and self.jump1==True and not (self.points_bol[3]==True or self.points_bol[5]==True) and self.jump_bol==True:#saab seina
             self.vy =-10
             self.jump1=False
             self.jump_bol=False
@@ -138,15 +138,15 @@ class Person:
             self.jump2=False
             self.jump_bol=False
 
-        if self.drone==False:
-            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
+        if self.drone==False:#aeglustab ainult kui pole robot
+            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:#aeglustab kui on maa peal
                 self.vx= int(self.vx * 0.75)
-##            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:
+##            if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==False:#aeglustab kui on õhus
 ##                if self.vx >0:
 ##                    self.vx=int(self.vx * 0.99)
 ##                if self.vx <0:
 ##                    self.vx=int(self.vx * 0.99)
-        elif self.drone==True:
+        elif self.drone==True:#kui on robot peatub otse kohe
             if self.move_bol[0]==False and self.move_bol[2]==False and self.points_bol[7]==True:
                 self.vx=0
 
@@ -163,10 +163,10 @@ class Person:
                 self.jump_bol=True
                 self.var=0
 
-        self.x+=self.vx
+        self.x+=self.vx# liigutab tegelast
         self.y+=self.vy
 
-    def set_goal(self):
+    def set_goal(self):#paneb valmis selle kuhu robo tahab minna
         try:self.goal =self.route[self.route_var]
         except IndexError:
             self.route_var=0
@@ -174,7 +174,7 @@ class Person:
         if self.goal[2] != None:
             self.t1 = time.time() + self.goal[2]
 
-    def go(self):
+    def go(self):# robot vajutab vasakule, paremale, üles, alla
         if self.goal[0] != None and self.goal[1] != None:
             if self.goal[0] < self.x:
                 self.move_bol[0] = True
@@ -202,42 +202,42 @@ class Person:
                 self.route_var+=1
                 self.set_goal()
 
-class Wall:
-    def __init__(self,x,y,w,h):
+class Wall:#seinte klass
+    def __init__(self,x,y,w,h):#sulgudesse tuleb alg kordinaadid, laiuse ja kõrgus
         self.x=x
         self.y=y
         self.w=w
         self.h=h
 
-    def draw(self):
+    def draw(self):#joonistab seina
         pygame.draw.rect(window,[0,0,0], [self.x, self.y, self.w, self.h],0)
 
-class WinArea:
-    def __init__(self,x,y,w,h):
+class WinArea:#ala milles seistas võidad
+    def __init__(self,x,y,w,h):#sulgudesse tuleb alg kordinaadid, laiuse ja kõrgus
         self.x=x
         self.y=y
         self.w=w
         self.h=h
 
-    def draw(self):
+    def draw(self):#joonistab võidu ala
         pygame.draw.rect(window,(71,209,255),[self.x, self.y, self.w, self.h],0)
 
-    def win(self,player):
+    def win(self,player):#kui on võidu alas siis võidab
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
              return True
         else: return False
 
-class LoseArea:
+class LoseArea:#ala milles seistas kaotad
     def __init__(self,x,y,w,h):
         self.x=x
         self.y=y
         self.w=w
         self.h=h
 
-    def draw(self):
+    def draw(self):#joonistab kaotus ala
         pygame.draw.rect(window,(100,0,0),[self.x, self.y, self.w, self.h],0)
 
-    def lose(self,player):
+    def lose(self,player):#kui on kaotus alas siis kaotab
         if player.x in range(self.x,self.x+self.w) and player.y in range(self.y,self.y+self.h):
             player.__init__(80,400,(225,0,0))
             global x
@@ -252,7 +252,7 @@ class LoseArea:
             return True
         else:return False
 
-def set_room(name):
+def set_room(name):#võttab selle mis on ruumis ja teevad need asjadeks ekraanil
     ls=[]
     if name == 'walls':
         for i in map[y][x]:
@@ -302,7 +302,7 @@ while on:
                 player.move_bol[3]=True
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=True
-            if e.key == pygame.K_r:
+            if e.key == pygame.K_r:# paneb tegelase algusesse
                 x=0
                 y=0
                 walls =set_room('walls')
@@ -322,12 +322,12 @@ while on:
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=False
 
-    window.blit(taust, (0, 0))  ###################################### tausta kuvamine
-    
+    window.blit(taust, (0, 0))  #joonistab tausta
+
     win =False
-    
+
     try:
-        for i in areas:
+        for i in areas:#kontrollib kas mängija on kaotamis alas
             if i.lose(player) == True:
                 walls =set_room('walls')
                 areas =set_room('areas')
@@ -336,10 +336,10 @@ while on:
     except NameError:pass
     except AttributeError:pass
 
-    for a in areas:
+    for a in areas:#joonistab alad
         a.draw()
-    for p in people:
-        if p.drone==True:
+    for p in people:#teeb kõik mis isikud peavad tegema
+        if p.drone==True:#teeb kõik mis on robit peab tegema
             p.go()
             if player.x in range(p.x-20,p.x+20) and player.y in range(p.y-20,p.y+20):
                 x=0
@@ -351,14 +351,14 @@ while on:
                 walls =set_room('walls')
                 areas =set_room('areas')
                 player.__init__(80,400,(225,0,0))
-                people.append(player)            
+                people.append(player)
                 algus = time.time()
 
         p.move()
         p.update(walls)
         p.draw()
 
-    if player.x < 0:
+    if player.x < 0:#liigutab mängia ühest ruumist teise
         x-=1
         player.x = sw
         walls =set_room('walls')
@@ -387,10 +387,7 @@ while on:
         people=set_room('drones')
         people.append(player)
 
-    for s in walls:
-        s.draw()
-
-    if x==0 and y==0:
+    if x==0 and y==0:#joonistab ruumid olenevalt mis toas ollakse
         window.blit(seinad1, (0, 0))
     elif x==1 and y==0:
         window.blit(seinad2, (0, 0))
@@ -405,14 +402,14 @@ while on:
     elif x==1 and y==1:
         window.blit(seinad7, (0, 0))
 
-    try:
+    try:#kontrollib kas on võidu alas
         for i in areas:
             if i.win(player) == True:
                 win=True
     except NameError:pass
     except AttributeError:pass
 
-    if win == True:
+    if win == True:#kui on võidu alas teeb asju
         lõpp = time.time()
         print(lõpp)
         koguaeg = str(round(lõpp - algus, 2))+" s"
