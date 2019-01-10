@@ -86,9 +86,9 @@ class Person:
             elif self.vy<0 and self.vx==0:
                  window.blit(huppamine,(self.x-20,self.y-20))
             elif self.vy<0 and self.vx<0:
-                 window.blit(pygame.transform.flip(kukkumine, True, False),(self.x-20,self.y-20))
+                 window.blit(pygame.transform.flip(huppamine, True, False),(self.x-20,self.y-20))
             elif self.vy>0 and self.vx>0:
-                 window.blit(huppamine,(self.x-20,self.y-20))
+                 window.blit(kukkumine,(self.x-20,self.y-20))
             elif self.vy>0 and self.vx<0:
                  window.blit(pygame.transform.flip(kukkumine, True, False),(self.x-20,self.y-20))
             elif self.vy>0 and self.vx==0:
@@ -123,8 +123,12 @@ class Person:
                 self.y =s.y+s.h+20
             elif self.x+20 in range(s.x, s.x+s.w) and self.y+20 in range(s.y,s.y+s.h):
                 self.points_bol[8]=True
+                self.jump1=True
+                self.jump2=True
             elif self.x-20 in range(s.x, s.x+s.w) and self.y+20 in range(s.y,s.y+s.h):
                 self.points_bol[6]=True
+                self.jump1=True
+                self.jump2=True
             elif self.x+20 in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
                 self.points_bol[2]=True
             elif self.x-20 in range(s.x, s.x+s.w) and self.y-20 in range(s.y,s.y+s.h):
@@ -145,17 +149,6 @@ class Person:
             self.vy=-5
             self.ro+=1
 
-        if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:#esimene hüppe
-            self.vy=-10
-            self.vx= 5
-            self.jump1 =False
-            self.jump_bol=False
-        elif self.points_bol[5]==True and self.move_bol[4]==True and self.jump_bol==True:
-            self.vy=-10
-            self.vx=-5
-            self.jump1 =False
-            self.jump_bol=False
-
         if self.move_bol[0]==True and self.move_bol[2]==True:#kui hoiab all nii vasakut ja paremat ei liigu mitte midagi
             self.vx =0
         elif self.move_bol[0]==True and self.points_bol[3] != True:#liigub vasakule
@@ -170,6 +163,17 @@ class Person:
         elif (self.move_bol[1]==True or self.move_bol[4]==True) and self.jump2==True and not (self.points_bol[3]==True or self.points_bol[5]==True) and self.jump_bol==True:
             self.vy =-10
             self.jump2=False
+            self.jump_bol=False
+            
+        if self.points_bol[3]==True and self.move_bol[4]==True and self.jump_bol==True:#esimene hüppe
+            self.vy=-10
+            self.vx= 5
+            self.jump1 =False
+            self.jump_bol=False
+        elif self.points_bol[5]==True and self.move_bol[4]==True and self.jump_bol==True:
+            self.vy=-10
+            self.vx=-5
+            self.jump1 =False
             self.jump_bol=False
 
         if self.drone==False:#aeglustab ainult kui pole robot
@@ -326,13 +330,13 @@ while on:
         if e.type == pygame.QUIT:
             on = False
         elif e.type == pygame.KEYDOWN:
-            if e.key == pygame.K_w:
+            if e.key == pygame.K_w or e.key == pygame.K_UP:
                 player.move_bol[1]=True
-            if e.key == pygame.K_a:
+            if e.key == pygame.K_a or e.key == pygame.K_LEFT:
                 player.move_bol[0]=True
-            if e.key == pygame.K_d:
+            if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
                 player.move_bol[2]=True
-            if e.key == pygame.K_s:
+            if e.key == pygame.K_s or e.key == pygame.K_DOWN:
                 player.move_bol[3]=True
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=True
@@ -344,14 +348,15 @@ while on:
                 people=set_room('drones')
                 people.append(player)
                 player.__init__(80,400,(225,0,0))
+                algus = time.time()
         elif e.type == pygame.KEYUP:
-            if e.key == pygame.K_w:
+            if e.key == pygame.K_w or e.key == pygame.K_UP:
                 player.move_bol[1]=False
-            if e.key == pygame.K_a:
+            if e.key == pygame.K_a or e.key == pygame.K_LEFT:
                 player.move_bol[0]=False
-            if e.key == pygame.K_d:
+            if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
                 player.move_bol[2]=False
-            if e.key == pygame.K_s:
+            if e.key == pygame.K_s or e.key == pygame.K_DOWN:
                 player.move_bol[3]=False
             if e.key == pygame.K_SPACE:
                 player.move_bol[4]=False
